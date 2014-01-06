@@ -1,0 +1,24 @@
+<?php
+
+//////////////////////////////////
+// chargement et initialisation //
+//////////////////////////////////
+
+// on load la class de gestion des BDD
+require_once ('toolSql/Bdd.class.php');
+
+// on lance la session
+session_start();
+
+// on set les obj de connexion SQL
+require_once 'inc/connexion.inc.php';
+
+//////////////////////////
+// Fin d'initialisation //
+//////////////////////////
+
+///////////////////////////////////////////////
+// Controleur prncipale de gestion des pages //
+///////////////////////////////////////////////
+
+// mettre votre code ici
