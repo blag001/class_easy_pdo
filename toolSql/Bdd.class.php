@@ -41,11 +41,12 @@ class Bdd
 		/**
 		 * cree une instance PDO avec les valeurs en argument
 		 *
-		 * @param STRING $host le host de votre base de donnee mysql
-		 * @param STRING $db_name le nom de la base de donnee
-		 * @param STRING $user le nom d'utilisateur
-		 * @param STRING $mdp le mot de passe a utiliser
-		 * @param STRING $production desactive les messages d'erreurs
+		 * @param string $host l'host a utiliser (localhost par defaut)
+		 * @param string $db_name nom de la base de donnee
+		 * @param string $user utilisateur de la BDD
+		 * @param string $mdp mot de passe de l'utilisateur
+		 * @param string $mdp mot de passe de l'utilisateur
+		 * @param string $production desactive les messages d'erreurs
 		 */
 	public function __construct($host=false, $db_name=false, $user=false, $mdp=false, $production=false)
 	{
@@ -139,17 +140,15 @@ class Bdd
 		 * On lui passe la requete SQL avec le(s) marqueur(s).
 		 * 	un marqueur est une string avec ':' devant
 		 * 		ex : 'SELECT * FROM Table WHERE Tab_code = :mon_marqueur '
-		 * On lui donne les arguments dans un tableau.
+		 * On lui donne les arguments dans un tableau (aussi nomme array).
 		 * 	l'array doit etre associatif marqueur => valeur
 		 * 		ex : 'array('mon_marqueur' => $codeTable)'
 		 * 		ex : 'array('marqueur1' => $var1, 'marqueur2'=> $var2)'
 		 *
 		 * Si vous savez que vous allez avoir un seul resultat
 		 * (par ex, un COUNT(*), un getUn...() )
-		 * utilisez en 3eme param "Bdd::SINGLE_RES" (ou TRUE)
+		 * utilisez en 3eme parametre de query() "Bdd::SINGLE_RES" (ou TRUE)
 		 * la methode vous retourneras directement un OBJET
-		 *
-		 * (Expoite a la fois les query() et les prepare() de PDO)
 		 *
 		 * La requete prend donc ces formes :
 		 * 		$data = $_SESSION['bdd']->query( 'SELECT * FROM table' );
@@ -160,11 +159,11 @@ class Bdd
 		 * 		$data = $_SESSION['bdd']->query( 'SELECT * FROM table WHERE tblCode = :code AND tblPays = :pays' ,
 		 * 			array('code'=>$codeTable , 'pays'=> $pays) );
 		 *
-		 * On recupere les valeur en utilisent le nom de la colonne dans la table (ou l'alias via "AS ...")
-		 * dans le cas du SINGLE_RES, on a directement un objet dans data :
+		 * On recupere les valeurs en utilisent le nom de la colonne dans la table (ou l'alias via "AS mon_alias")
+		 * dans le cas du SINGLE_RES, on a directement un OBJET dans data :
 		 * 		echo $data->tblColonne1;
-		 * 		echo $data->nb;
-		 * Sinon il faut faire une boucle dans le tableau (array) retourne
+		 * 		echo $data->mon_alias;
+		 * Sinon il faut faire une boucle dans le tableau (array) :
 		 * 		foreach($data as $unObjet){
 		 * 			echo $unObjet->tblColonne2;
 		 * 		}
@@ -191,10 +190,10 @@ class Bdd
 				$req = $this->oBdd->query($sql);
 			}
 
-				// si on demande une mono-ligne, simple fetch
+				// si on demande une mono-ligne, un simple fetch
 			if($mono_line)
 				$data = $req->fetch();
-			else // sinon on cherche tout les obj en array
+			else // sinon on cherche tous les OBJET dans un ARRAY
 				$data = $req->fetchAll();
 
 				// on ferme la requete en cours
@@ -202,16 +201,19 @@ class Bdd
 
 			return $data;
 		}
+			// gestion des erreurs
 		catch (PDOException $e) {
+				// si on est en production, on ne met pas de detail
 			if($this->production)
 				echo 'ERREUR : Merci de contacter le Webmaster.';
+				// sinon les info de debugage
 			else{
 				echo '<h1 style="color:#a33">ERROR SQL WITH PDO</h1>'."\n";
 				echo '<strong>'.$e->getMessage().'</strong><br />'."\n";
 				echo '<h2 style="color:#a33">In this :</h2>'."\n";
 				echo '<pre style="color:#fff; background-color:#333">'.$e->getTraceAsString().'</pre>';
 			}
-			die();
+			die(); // en cas d'erreur, on stop le script
 		}
 
 	}
@@ -265,16 +267,19 @@ class Bdd
 
 			return $out;
 		}
+			// gestion des erreurs
 		catch (PDOException $e) {
+				// si on est en production, on ne met pas de detail
 			if($this->production)
 				echo 'ERREUR : Merci de contacter le Webmaster.';
+				// sinon les info de debugage
 			else{
 				echo '<h1 style="color:#a33">ERROR SQL WITH PDO</h1>'."\n";
 				echo '<strong>'.$e->getMessage().'</strong><br />'."\n";
 				echo '<h2 style="color:#a33">In this :</h2>'."\n";
 				echo '<pre style="color:#fff; background-color:#333">'.$e->getTraceAsString().'</pre>';
 			}
-			die();
+			die(); // en cas d'erreur, on stop le script
 		}
 	}
 }
