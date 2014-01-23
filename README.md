@@ -73,7 +73,9 @@ class OdbBonIntervention
 					WHERE BI_Num = :code
 						AND BI_Technicien = :techCode";
 
-			$data = $this->oBdd->query($req , array('code'=>$code, 'techCode'=>$techCode), Bdd::SINGLE_RES);
+			$data = $this->oBdd->query($req , 
+				array('code'=>$code, 'techCode'=>$techCode), 
+				Bdd::SINGLE_RES);
 
 			return (bool) $data->nb;
 		}
@@ -102,7 +104,9 @@ class OdbBonIntervention
 				WHERE BI_Num = :code
 					AND BI_Technicien = :techCode";
 
-		$leBonInter = $this->oBdd->query($req, array('code'=>$code, 'techCode'=>$techCode), Bdd::SINGLE_RES);
+		$leBonInter = $this->oBdd->query($req, 
+			array('code'=>$code, 'techCode'=>$techCode), 
+			Bdd::SINGLE_RES);
 
 		return $leBonInter;
 	}
@@ -184,7 +188,8 @@ class OdbBonIntervention
 					AND BI_Technicien = :techCode"
 					;
 
-		$lesBonsInter = $this->oBdd->query($req, array('valeur'=>'%'.$valeur.'%', 'techCode'=>$techCode));
+		$lesBonsInter = $this->oBdd->query($req, 
+			array('valeur'=>'%'.$valeur.'%', 'techCode'=>$techCode));
 
 		return $lesBonsInter;
 	}
