@@ -2,11 +2,12 @@
 	/**
 	 * class de gestion PDO simplifiee
 	 *
-	 * @method {mixed} query(STRING $sql[, ARRAY $arg[, BOOL $mono_line]]) lance une recherche
-	 * 	       qui attend un ou plusieurs resultats (retour en OBJET ou ARRAY d'OBJET)
+	 * @method mixed query(STRING $sql[, ARRAY $arg[, BOOL $mono_line]])
+	 *         			lance une recherche qui attend un ou plusieurs resultats
+	 *         			(retour en OBJET ou ARRAY d'OBJET)
 	 *
-	 * @method {int} exec(STRING $sql[, ARRAY $arg]) execute une commande et
-	 * 	       retourne le nombre de lignes affectees
+	 * @method int exec(STRING $sql[, ARRAY $arg])
+	 *         			execute une commande et retourne le nombre de lignes affectees
 	 *
 	 * @global boolean SINGLE_RES
 	 * @author Benoit <benoitelie1@gmail.com>
@@ -132,8 +133,8 @@ class Bdd
 		/**
 		 * Passe les requetes avec ou sans variable
 		 *
-		 * Retourne soit un OBJET si $mono_line a TRUE (ou "Bdd::SINGLE_RES"),
-		 * soit un array d'OBJET si $mono_line a FALSE ou NULL
+		 * Retourne soit **un OBJET** si $mono_line a TRUE (ou "Bdd::SINGLE_RES"),
+		 * soit **un ARRAY d'OBJET** si $mono_line a FALSE ou NULL
 		 *
 		 * On lui passe la requete SQL avec le(s) marqueur(s).
 		 * 	un marqueur est une string avec ':' devant
@@ -149,6 +150,24 @@ class Bdd
 		 * la methode vous retourneras directement un OBJET
 		 *
 		 * (Expoite a la fois les query() et les prepare() de PDO)
+		 *
+		 * La requete prend donc ces formes :
+		 * 		$data = $_SESSION['bdd']->query( 'SELECT * FROM table' );
+		 * 		$data = $_SESSION['bdd']->query( 'SELECT * FROM table WHERE tblCode = :code' , array('code'=>$codeTable) );
+		 * 		$data = $_SESSION['bdd']->query( 'SELECT COUNT(*) AS nb FROM table WHERE tblCode = :code' ,
+		 * 			array('code'=>$codeTable) ,
+		 * 			Bdd::SINGLE_RES );
+		 * 		$data = $_SESSION['bdd']->query( 'SELECT * FROM table WHERE tblCode = :code AND tblPays = :pays' ,
+		 * 			array('code'=>$codeTable , 'pays'=> $pays) );
+		 *
+		 * On recupere les valeur en utilisent le nom de la colonne dans la table (ou l'alias via "AS ...")
+		 * dans le cas du SINGLE_RES, on a directement un objet dans data :
+		 * 		echo $data->tblColonne1;
+		 * 		echo $data->nb;
+		 * Sinon il faut faire une boucle dans le tableau (array) retourne
+		 * 		foreach($data as $unObjet){
+		 * 			echo $unObjet->tblColonne2;
+		 * 		}
 		 *
 		 * @param  string  $sql
 		 * @param  array  $arg
@@ -202,12 +221,18 @@ class Bdd
 		 *
 		 * On lui passe la requete SQL avec les marqueurs.
 		 * 	un marqueur est une string avec ':' devant
-		 * 		ex : 'DELETE FROM Table WHERE Tab_code = :mon_marqueur '
-		 * 		ex : 'DELETE FROM Table WHERE Tab_val > :marqueur1 AND Tab_type = :marqueur2 '
+		 * 		ex : 'DELETE FROM Table WHERE tblCode = :mon_marqueur '
+		 * 		ex : 'DELETE FROM Table WHERE tblVal > :marqueur1 AND tblType = :marqueur2 '
 		 * on lui donne les arguments dans un tableau.
 		 * 	l'array doit etre associatif marqueur => valeur
 		 * 		ex : 'array('mon_marqueur' => $codeTable)'
 		 * 		ex2 : 'array('marqueur1' => $clause1, 'marqueur2'=>$clause2)'
+		 *
+		 * La requete prend donc ces formes :
+		 * 		$data = $_SESSION['bdd']->exec( 'DELETE FROM Table WHERE tblInactivite > 60' );
+		 * 		$data = $_SESSION['bdd']->exec( 'DELETE FROM Table WHERE tblVal > :code' , array('code'=>$codeTable) );
+		 * 		$data = $_SESSION['bdd']->exec( 'DELETE FROM Table WHERE tblVal > :code AND tblType = :type' ,
+		 * 			array('code'=>$codeTable , 'type'=> $typeInfo) );
 		 *
 		 * retourne le nombre de ligne affectee
 		 *
