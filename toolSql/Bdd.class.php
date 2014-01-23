@@ -2,9 +2,10 @@
 	/**
 	 * class de gestion PDO simplifiee
 	 *
-	 * @method {mixed} query(string $sql[, array $arg[, bool $mono_line]]) lance une recherche
-	 * 	       qui attend un ou plusieurs resultats (retour en objet ou array d'objet)
-	 * @method {int} exec(string $sql[, array $arg]) execute une commande et
+	 * @method {mixed} query(STRING $sql[, ARRAY $arg[, BOOL $mono_line]]) lance une recherche
+	 * 	       qui attend un ou plusieurs resultats (retour en OBJET ou ARRAY d'OBJET)
+	 *
+	 * @method {int} exec(STRING $sql[, ARRAY $arg]) execute une commande et
 	 * 	       retourne le nombre de lignes affectees
 	 *
 	 * @global boolean SINGLE_RES
@@ -13,10 +14,11 @@
 class Bdd
 {
 		// valeur par defaut en cas d'instanciation sans valeur
-	private $host    = 'localhost';
-	private $db_name = 'test';
-	private $user    = 'root';
-	private $mdp     = '';
+	private $host       = 'localhost';
+	private $db_name    = 'test';
+	private $user       = 'root';
+	private $mdp        = '';
+	private $production = false;
 
 		/** @var PDO variable avec l'instance PDO */
 	private $oBdd  = null;
@@ -25,9 +27,9 @@ class Bdd
 		 * constante en cas de resultat unique
 		 *
 		 * Si vous savez que vous allez avoir un seul resultat
-		 * (par ex, un COUNT(*), un getUn...() )
+		 * (par exemple: un COUNT(*), un getUn...() )
 		 * utilisez en 3eme param de query() "Bdd::SINGLE_RES"
-		 * la methode vous retourneras directement un objet
+		 * la methode vous retourneras directement un OBJET
 		 */
 	const SINGLE_RES = true;
 
@@ -38,12 +40,13 @@ class Bdd
 		/**
 		 * cree une instance PDO avec les valeurs en argument
 		 *
-		 * @param string $host
-		 * @param string $db_name
-		 * @param string $user
-		 * @param string $mdp
+		 * @param STRING $host le host de votre base de donnee mysql
+		 * @param STRING $db_name le nom de la base de donnee
+		 * @param STRING $user le nom d'utilisateur
+		 * @param STRING $mdp le mot de passe a utiliser
+		 * @param STRING $production desactive les messages d'erreurs
 		 */
-	public function __construct($host=false, $db_name=false, $user=false, $mdp=false)
+	public function __construct($host=false, $db_name=false, $user=false, $mdp=false, $production=false)
 	{
 			// save des variable si on en passe au constructeur
 		if(!empty($host))
@@ -58,6 +61,9 @@ class Bdd
 		if(!empty($mdp))
 			$this->mdp = $mdp;
 
+		if(!empty($production))
+			$this->production = $production;
+
 			// on lance la connexion
 		$this->connexion();
 	}
@@ -66,14 +72,14 @@ class Bdd
 		 * variable a sauver a la fin du chargement de page
 		 *
 		 * a la fin du chargement d'une page, les variable _SESSION
-		 * sont toute convertie en String, le lien PDO doit donc etre detruit
+		 * sont toute convertie en STRING, le lien PDO doit donc etre detruit
 		 * on ne concerve que les variables pour le chargement de la page suivante
 		 *
-		 * @return array
+		 * @return ARRAY
 		 */
 	public function __sleep()
 	{
-		return array('host', 'db_name', 'user', 'mdp');
+		return array('host', 'db_name', 'user', 'mdp', 'production');
 	}
 
 		/**
@@ -91,9 +97,10 @@ class Bdd
 		/**
 		 * cree une instance PDO
 		 *
-		 * passe le mode de recherche en retour d'Objet
+		 * passe le mode de recherche en retour d'OBJET
+		 * passe le mode d'erreur en exception
 		 * utilise l'UTF-8 pour les transactions :
-		 * Il est conseille de faire tout votre site en utf8
+		 * Il est conseille de faire tout votre site en UTF8
 		 *
 		 * @return void
 		 */
@@ -106,8 +113,10 @@ class Bdd
 				$this->user,
 				$this->mdp
 				);
-				// on active le mode retour d'objet
+				// on active le mode retour d'OBJET
 			$this->oBdd->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
+				// on active le mode erreur par exception
+			$this->oBdd->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 				// on force l'utilisation d'UTF-8
 			$this->oBdd->exec("SET CHARACTER SET utf8");
 		}
@@ -123,9 +132,8 @@ class Bdd
 		/**
 		 * Passe les requetes avec ou sans variable
 		 *
-		 * Expoite a la fois les query() et les prepare() de PDO
-		 * retourne soit un objet si $mono_line a true,
-		 * soit un array d'objet si false/null
+		 * Retourne soit un OBJET si $mono_line a TRUE (ou "Bdd::SINGLE_RES"),
+		 * soit un array d'OBJET si $mono_line a FALSE ou NULL
 		 *
 		 * On lui passe la requete SQL avec le(s) marqueur(s).
 		 * 	un marqueur est une string avec ':' devant
@@ -138,7 +146,9 @@ class Bdd
 		 * Si vous savez que vous allez avoir un seul resultat
 		 * (par ex, un COUNT(*), un getUn...() )
 		 * utilisez en 3eme param "Bdd::SINGLE_RES" (ou TRUE)
-		 * la methode vous retourneras directement un objet
+		 * la methode vous retourneras directement un OBJET
+		 *
+		 * (Expoite a la fois les query() et les prepare() de PDO)
 		 *
 		 * @param  string  $sql
 		 * @param  array  $arg
@@ -147,30 +157,44 @@ class Bdd
 		 */
 	public function query($sql, array $arg = null, $mono_line = false)
 	{
-			// on regarde si on a des variables en arguments
-		if(!empty($arg))
-		{
-				// on prepare la requete SQL
-			$req = $this->oBdd->prepare($sql);
-				// on l'execute avec les variables
-			$req->execute($arg);
+		try {
+				// on regarde si on a des variables en arguments
+			if(!empty($arg))
+			{
+					// on prepare la requete SQL
+				$req = $this->oBdd->prepare($sql);
+					// on l'execute avec les variables
+				$req->execute($arg);
+			}
+			else
+			{
+					// on fait une query simple
+				$req = $this->oBdd->query($sql);
+			}
+
+				// si on demande une mono-ligne, simple fetch
+			if($mono_line)
+				$data = $req->fetch();
+			else // sinon on cherche tout les obj en array
+				$data = $req->fetchAll();
+
+				// on ferme la requete en cours
+			$req->closeCursor();
+
+			return $data;
 		}
-		else
-		{
-				// on fait une query simple
-			$req = $this->oBdd->query($sql);
+		catch (PDOException $e) {
+			if($this->production)
+				echo 'ERREUR : Merci de contacter le Webmaster.';
+			else{
+				echo '<h1 style="color:#a33">ERROR SQL WITH PDO</h1>'."\n";
+				echo '<strong>'.$e->getMessage().'</strong><br />'."\n";
+				echo '<h2 style="color:#a33">In this :</h2>'."\n";
+				echo '<pre style="color:#fff; background-color:#333">'.$e->getTraceAsString().'</pre>';
+			}
+			die();
 		}
 
-			// si on demande une mono-ligne, simple fetch
-		if($mono_line)
-			$data = $req->fetch();
-		else // sinon on cherche tout les obj en array
-			$data = $req->fetchAll();
-
-			// on ferme la requete en cours
-		$req->closeCursor();
-
-		return $data;
 	}
 
 		/**
@@ -193,26 +217,39 @@ class Bdd
 		 */
 	public function exec($sql, array $arg = null)
 	{
-			// on regarde si on a des variable en arguments
-		if(!empty($arg))
-		{
-				// on prepare la requete
-			$req = $this->oBdd->prepare($sql);
+		try {
+				// on regarde si on a des variable en arguments
+			if(!empty($arg))
+			{
+					// on prepare la requete
+				$req = $this->oBdd->prepare($sql);
 
-				// on l'execute avec les arguments
-			if($out = $req->execute($arg)){
-					// si pas de probleme, on compte le nombre de ligne affectee
-				$out = $req->rowCount();
+					// on l'execute avec les arguments
+				if($out = $req->execute($arg)){
+						// si pas de probleme, on compte le nombre de ligne affectee
+					$out = $req->rowCount();
+				}
+
+					// on ferme la requete en cours
+				$req->closeCursor();
+			}
+			else{
+					// si pas de variable, on fait une requete simple
+				$out = $this->oBdd->exec($sql);
 			}
 
-				// on ferme la requete en cours
-			$req->closeCursor();
+			return $out;
 		}
-		else{
-				// si pas de variable, on fait une requete simple
-			$out = $this->oBdd->exec($sql);
+		catch (PDOException $e) {
+			if($this->production)
+				echo 'ERREUR : Merci de contacter le Webmaster.';
+			else{
+				echo '<h1 style="color:#a33">ERROR SQL WITH PDO</h1>'."\n";
+				echo '<strong>'.$e->getMessage().'</strong><br />'."\n";
+				echo '<h2 style="color:#a33">In this :</h2>'."\n";
+				echo '<pre style="color:#fff; background-color:#333">'.$e->getTraceAsString().'</pre>';
+			}
+			die();
 		}
-
-		return $out;
 	}
 }
