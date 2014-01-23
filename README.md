@@ -9,8 +9,9 @@ D'abord, la class en question :
 `/toolSql/Bdd.class.php`
 
 Elle a deux méthodes à utiliser :
-`$_SESSION['bdd']->query()`
-`$_SESSION['bdd']->exec()`
+- `$_SESSION['bdd']->query()`
+- `$_SESSION['bdd']->exec()`
+
 Le reste est expliqué dans les comm entaires de la class ;)
 
 Ensuite, la page d'instanciation :
@@ -18,20 +19,20 @@ Ensuite, la page d'instanciation :
 
 `/inc/connexion.inc.php`
 
-Juste le code dans new Bdd() à changer suivant votre configuration :
-- passez juste null,null,null,null si vous voulez utilisez les valeurs par défaut,
+Juste le code dans `new Bdd()` à changer suivant votre configuration :
+- passez juste `null,null,null,null` si vous voulez utilisez les valeurs par défaut,
 - Sinon remplacez comme indiqué dans les commentaires
 
-Et le bout d'index pour faire tourner ce petit monde :
+Et le bout d'index qui va bien :
 --------------------------------------------------------------
 
 `/index.php`
 
-En gros vous avez trois lignes à ajouter à l'index principal 
+En gros vous avez trois lignes à ajouter à l'index principal.
+
 **/!\ attention à l'ordre de ces lignes, sinon GROS BUG... /!\**
 
-J'ajoute aussi un bout de code de démo (c'est un model tiré d'un MVC), 
-Il exploite la class dans plusieurs cas d'utilisation :
+J'ajoute aussi un bout de code de démo (c'est un model tiré d'un MVC) :
 
 <pre>
 <?php
