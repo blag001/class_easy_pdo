@@ -11,6 +11,7 @@
 	 *
 	 * @global boolean SINGLE_RES
 	 * @author Benoit <benoitelie1@gmail.com>
+	 * @version v.3.0.1
 	 */
 class Bdd
 {
@@ -24,14 +25,7 @@ class Bdd
 		/** @var PDO variable avec l'instance PDO */
 	private $oBdd  = null;
 
-		/**
-		 * constante en cas de resultat unique
-		 *
-		 * Si vous savez que vous allez avoir un seul resultat
-		 * (par exemple: un COUNT(*), un getUn...() )
-		 * utilisez en 3eme param de query() "Bdd::SINGLE_RES"
-		 * la methode vous retourneras directement un OBJET
-		 */
+		/** @global constante en cas de resultat unique */
 	const SINGLE_RES = true;
 
 	////////////////////
@@ -67,29 +61,19 @@ class Bdd
 			$this->production = $production;
 
 			// on lance la connexion
-		$this->connexion();
+		$this->_connexion();
 	}
 
-		/**
-		 * variable a sauver a la fin du chargement de page
-		 *
-		 * a la fin du chargement d'une page, les variable _SESSION
-		 * sont toute convertie en STRING, le lien PDO doit donc etre detruit
-		 * on ne concerve que les variables pour le chargement de la page suivante
-		 *
-		 * @return ARRAY
-		 */
+		/** variables a sauver a la fin du chargement de page */
 	public function __sleep()
 	{
 		return array('host', 'db_name', 'user', 'mdp', 'production');
 	}
 
-		/**
-		 * on reconnect au chargement de la page
-		 */
+		/** on reconnect au chargement de la page */
 	public function __wakeup()
 	{
-		$this->connexion();
+		$this->_connexion();
 	}
 
 	//////////////
@@ -106,25 +90,44 @@ class Bdd
 		 *
 		 * @return void
 		 */
-	protected function connexion()
+	private function _connexion()
 	{
 		try{
 				// on appelle le constructeur POD
 			$this->oBdd = new PDO(
 				'mysql:host='.$this->host.';dbname='.$this->db_name,
 				$this->user,
-				$this->mdp
-				);
+				$this->mdp);
 				// on active le mode retour d'OBJET
 			$this->oBdd->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
 				// on active le mode erreur par exception
 			$this->oBdd->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 				// on force l'utilisation d'UTF-8
 			$this->oBdd->exec("SET CHARACTER SET utf8");
+		}catch (Exception $e){
+			$this->_showError($e);
 		}
-			catch (Exception $e){
-				die('Erreur : ' . $e->getMessage());
-		}
+	}
+
+		/**
+		 * Gere l'affichage des erreur via exception
+		 *
+		 * @param  Exception $e une exception capturee
+		 * @return void    pas de retour : termine le script
+		 */
+	private function _showError($e)
+	{
+				// si on est en production, on ne met pas de detail
+			if($this->production)
+				echo 'ERREUR : Merci de contacter le Webmaster.';
+				// sinon les info de debugage
+			else{
+				echo '<h1 style="color:#a33">ERROR SQL WITH PDO</h1>'."\n";
+				echo '<strong>'.$e->getMessage().'</strong><br />'."\n";
+				echo '<h2 style="color:#a33">In this :</h2>'."\n";
+				echo '<pre style="color:#fff; background-color:#333">'.$e->getTraceAsString().'</pre>';
+			}
+			die(); // en cas d'erreur, on stop le script
 	}
 
 	/////////////
@@ -132,14 +135,14 @@ class Bdd
 	/////////////
 
 		/**
-		 * Passe les requetes avec ou sans variable
+		 * Passe une requete SQL avec ou sans variable (SELECT)
 		 *
-		 * Retourne soit **un OBJET** si $mono_line a TRUE (ou "Bdd::SINGLE_RES"),
+		 * Retourne soit **un OBJET** si $mono_line a TRUE ou "Bdd::SINGLE_RES",
 		 * soit **un ARRAY d'OBJET** si $mono_line a FALSE ou NULL
 		 *
 		 * On lui passe la requete SQL avec le(s) marqueur(s).
 		 * 	un marqueur est une string avec ':' devant
-		 * 		ex : 'SELECT * FROM Table WHERE Tab_code = :mon_marqueur '
+		 * 		ex : 'SELECT * FROM table WHERE tab_code = :mon_marqueur '
 		 * On lui donne les arguments dans un tableau (aussi nomme array).
 		 * 	l'array doit etre associatif marqueur => valeur
 		 * 		ex : 'array('mon_marqueur' => $codeTable)'
@@ -152,26 +155,26 @@ class Bdd
 		 *
 		 * La requete prend donc ces formes :
 		 * 		$data = $_SESSION['bdd']->query( 'SELECT * FROM table' );
-		 * 		$data = $_SESSION['bdd']->query( 'SELECT * FROM table WHERE tblCode = :code' , array('code'=>$codeTable) );
-		 * 		$data = $_SESSION['bdd']->query( 'SELECT COUNT(*) AS nb FROM table WHERE tblCode = :code' ,
+		 * 		$data = $_SESSION['bdd']->query( 'SELECT * FROM table WHERE tab_code = :code' , array('code'=>$codeTable) );
+		 * 		$data = $_SESSION['bdd']->query( 'SELECT COUNT(*) AS alias_nombre FROM table WHERE tab_code = :code' ,
 		 * 			array('code'=>$codeTable) ,
 		 * 			Bdd::SINGLE_RES );
-		 * 		$data = $_SESSION['bdd']->query( 'SELECT * FROM table WHERE tblCode = :code AND tblPays = :pays' ,
+		 * 		$data = $_SESSION['bdd']->query( 'SELECT * FROM table WHERE tab_code = :code AND tab_pays = :pays' ,
 		 * 			array('code'=>$codeTable , 'pays'=> $pays) );
 		 *
 		 * On recupere les valeurs en utilisent le nom de la colonne dans la table (ou l'alias via "AS mon_alias")
 		 * dans le cas du SINGLE_RES, on a directement un OBJET dans data :
-		 * 		echo $data->tblColonne1;
+		 * 		echo $data->tab_colonne_1;
 		 * 		echo $data->mon_alias;
 		 * Sinon il faut faire une boucle dans le tableau (array) :
 		 * 		foreach($data as $unObjet){
-		 * 			echo $unObjet->tblColonne2;
+		 * 			echo $unObjet->tab_colonne_2;
 		 * 		}
 		 *
-		 * @param  string  $sql
-		 * @param  array  $arg
-		 * @param  boolean $mono_line
-		 * @return mixed
+		 * @param  string  $sql la requete SQL a executer
+		 * @param  array  $arg facultatif : le tableau d'arguments
+		 * @param  boolean $mono_line facultatif : si le resultat doit etre un objet
+		 * @return mixed retourne un objet ou un tableau (array) d'objets
 		 */
 	public function query($sql, array $arg = null, $mono_line = false)
 	{
@@ -203,38 +206,28 @@ class Bdd
 		}
 			// gestion des erreurs
 		catch (PDOException $e) {
-				// si on est en production, on ne met pas de detail
-			if($this->production)
-				echo 'ERREUR : Merci de contacter le Webmaster.';
-				// sinon les info de debugage
-			else{
-				echo '<h1 style="color:#a33">ERROR SQL WITH PDO</h1>'."\n";
-				echo '<strong>'.$e->getMessage().'</strong><br />'."\n";
-				echo '<h2 style="color:#a33">In this :</h2>'."\n";
-				echo '<pre style="color:#fff; background-color:#333">'.$e->getTraceAsString().'</pre>';
-			}
-			die(); // en cas d'erreur, on stop le script
+			$this->_showError($e);
 		}
 
 	}
 
 		/**
-		 * execute une requete SQL
+		 * execute une requete SQL (DELETE, INSERT INTO, UPDATE)
 		 *
 		 * On lui passe la requete SQL avec les marqueurs.
 		 * 	un marqueur est une string avec ':' devant
-		 * 		ex : 'DELETE FROM Table WHERE tblCode = :mon_marqueur '
-		 * 		ex : 'DELETE FROM Table WHERE tblVal > :marqueur1 AND tblType = :marqueur2 '
+		 * 		ex : 'DELETE FROM table WHERE tab_code = :mon_marqueur '
+		 * 		ex : 'DELETE FROM table WHERE tab_val > :marqueur1 AND tab_type = :marqueur2 '
 		 * on lui donne les arguments dans un tableau.
 		 * 	l'array doit etre associatif marqueur => valeur
 		 * 		ex : 'array('mon_marqueur' => $codeTable)'
 		 * 		ex2 : 'array('marqueur1' => $clause1, 'marqueur2'=>$clause2)'
 		 *
 		 * La requete prend donc ces formes :
-		 * 		$data = $_SESSION['bdd']->exec( 'DELETE FROM Table WHERE tblInactivite > 60' );
-		 * 		$data = $_SESSION['bdd']->exec( 'DELETE FROM Table WHERE tblVal > :code' , array('code'=>$codeTable) );
-		 * 		$data = $_SESSION['bdd']->exec( 'DELETE FROM Table WHERE tblVal > :code AND tblType = :type' ,
-		 * 			array('code'=>$codeTable , 'type'=> $typeInfo) );
+		 * 		$data = $_SESSION['bdd']->exec( 'DELETE FROM table WHERE tab_connexion < 6' );
+		 * 		$data = $_SESSION['bdd']->exec( 'DELETE FROM table WHERE tab_val = :code' , array('code'=>$codeTable) );
+		 * 		$data = $_SESSION['bdd']->exec( 'INSERT INTO table (`tab_colonne_1`,`tab_colonne_2`) VALUES (:valeur1,:valeur2)' ,
+		 * 			array('valeur1'=>$val1 , 'valeur2'=> $val2) );
 		 *
 		 * retourne le nombre de ligne affectee
 		 *
@@ -269,17 +262,7 @@ class Bdd
 		}
 			// gestion des erreurs
 		catch (PDOException $e) {
-				// si on est en production, on ne met pas de detail
-			if($this->production)
-				echo 'ERREUR : Merci de contacter le Webmaster.';
-				// sinon les info de debugage
-			else{
-				echo '<h1 style="color:#a33">ERROR SQL WITH PDO</h1>'."\n";
-				echo '<strong>'.$e->getMessage().'</strong><br />'."\n";
-				echo '<h2 style="color:#a33">In this :</h2>'."\n";
-				echo '<pre style="color:#fff; background-color:#333">'.$e->getTraceAsString().'</pre>';
-			}
-			die(); // en cas d'erreur, on stop le script
+			$this->_showError($e);
 		}
 	}
 }
