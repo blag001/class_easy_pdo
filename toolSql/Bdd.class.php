@@ -11,7 +11,7 @@
 	 *
 	 * @global boolean SINGLE_RES
 	 * @author Benoit <benoitelie1@gmail.com>
-	 * @version v.3.0.1
+	 * @version v.3.0.2
 	 * @link https://github.com/blag001/class_easy_pdo depot GitHub
 	 */
 class Bdd
