@@ -9,8 +9,8 @@ D'abord, la class en question :
 `/toolSql/Bdd.class.php`
 
 Elle a deux méthodes à utiliser :
-- `$_SESSION['bdd']->query()`
-- `$_SESSION['bdd']->exec()`
+- `$_SESSION['bdd']->query(string $requete_sql[, array $argument[, bool $retour_mono_line]])`
+- `$_SESSION['bdd']->exec(string $requete_sql[, array $argument])`
 
 ### ->query()
 
@@ -31,7 +31,7 @@ On lui donne **les arguments** dans un tableau (aussi nomme array).
 - ex : `array('mon_marqueur' => $codeTable)`
 - ex : `array('marqueur1' => $var1, 'marqueur2'=> $var2)`
 
-Si vous savez que vous allez avoir un seul resultat *(par ex, un `COUNT(*)`, un `getUn...()` )*,
+Si vous savez que vous allez avoir un seul resultat *(par ex, un `COUNT()`, un `getUn...()` )*,
 utilisez en 3ème parametre de `query()` **la constante** `Bdd::SINGLE_RES` (ou TRUE).
 
 La methode vous retourneras alors directement un **OBJET**
