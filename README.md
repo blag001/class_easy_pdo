@@ -2,6 +2,7 @@ class_easy_pdo
 ==============
 
 *class de gestion de connexion a mysql en PDO*
+Voir [l'onglet Releases](https://github.com/blag001/class_easy_pdo/releases) pour télécharger la dernière version stable
 
 D'abord, la class en question :
 -------------------------------
