@@ -2,7 +2,7 @@
 	/**
 	 * instanciation de la connexion BDD dans une variable de session
 	 *
-	 * /!\ changez ici par vos informations de connexion /!\
+	 * @todo  /!\ changez ici par vos informations de connexion /!\
 	 *
 	 * Par defaut, si null ou false dans le "Bdd()" :
 	 * 		$host       = 'localhost';

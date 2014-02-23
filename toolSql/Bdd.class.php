@@ -2,16 +2,16 @@
 	/**
 	 * class de gestion PDO simplifiee
 	 *
-	 * @method mixed query(STRING $sql[, ARRAY $arg[, BOOL $mono_line]])
+	 * @method mixed query(string $sql[, array $arg[, bool $mono_line]])
 	 *         			lance une recherche qui attend un ou plusieurs resultats
-	 *         			(retour en OBJET ou ARRAY d'OBJET)
+	 *         			(retour en OBJET ou array d'OBJET)
 	 *
-	 * @method int exec(STRING $sql[, ARRAY $arg])
+	 * @method int exec(string $sql[, array $arg])
 	 *         			execute une commande et retourne le nombre de lignes affectees
 	 *
 	 * @global boolean SINGLE_RES
 	 * @author Benoit <benoitelie1@gmail.com>
-	 * @version v.3.0.2
+	 * @version v.4.0.0
 	 * @link https://github.com/blag001/class_easy_pdo depot GitHub
 	 */
 class Bdd
@@ -45,7 +45,7 @@ class Bdd
 		 */
 	public function __construct($host=false, $db_name=false, $user=false, $mdp=false, $production=false)
 	{
-			// save des variable si on en passe au constructeur
+			// sauvegarde des variables si on en passe au constructeur
 		if(!empty($host))
 			$this->host = $host;
 
@@ -128,6 +128,7 @@ class Bdd
 				echo '<h2 style="color:#a33">In this :</h2>'."\n";
 				echo '<pre style="color:#fff; background-color:#333">'.$e->getTraceAsString().'</pre>';
 			}
+
 			die(); // en cas d'erreur, on stop le script
 	}
 
@@ -136,17 +137,18 @@ class Bdd
 	/////////////
 
 		/**
-		 * Passe une requete SQL avec ou sans variable (SELECT)
+		 * Passe une requete SQL avec ou sans variable (type SELECT)
 		 *
-		 * Retourne soit **un OBJET** si $mono_line a TRUE ou "Bdd::SINGLE_RES",
-		 * soit **un ARRAY d'OBJET** si $mono_line a FALSE ou NULL
+		 * Retourne soit **un OBJET** si $mono_line a "Bdd::SINGLE_RES" (ou TRUE),
+		 * soit **un ARRAY d'OBJET** si $mono_line a FALSE ou NULL (par defaut)
 		 *
-		 * On lui passe la requete SQL avec le(s) marqueur(s).
+		 * On lui passe en 1er parametre la requete SQL avec le(s) marqueur(s).
 		 * 	un marqueur est une string avec ':' devant
-		 * 		ex : 'SELECT * FROM table WHERE tab_code = :mon_marqueur '
-		 * On lui donne les arguments dans un tableau (aussi nomme array).
+		 * 		ex : 'SELECT * FROM `maTable` WHERE `tab_id` = :mon_marqueur '
+		 *
+		 * On lui donne en 2nd parametre les arguments dans un tableau (aussi nomme array).
 		 * 	l'array doit etre associatif marqueur => valeur
-		 * 		ex : 'array('mon_marqueur' => $codeTable)'
+		 * 		ex : 'array('mon_marqueur' => $maVariable)'
 		 * 		ex : 'array('marqueur1' => $var1, 'marqueur2'=> $var2)'
 		 *
 		 * Si vous savez que vous allez avoir un seul resultat
@@ -155,19 +157,22 @@ class Bdd
 		 * la methode vous retourneras directement un OBJET
 		 *
 		 * La requete prend donc ces formes :
-		 * 		$data = $_SESSION['bdd']->query( 'SELECT * FROM table' );
-		 * 		$data = $_SESSION['bdd']->query( 'SELECT * FROM table WHERE tab_code = :code' , array('code'=>$codeTable) );
-		 * 		$data = $_SESSION['bdd']->query( 'SELECT COUNT(*) AS alias_nombre FROM table WHERE tab_code = :code' ,
+		 * 		$data = $_SESSION['bdd']->query( 'SELECT * FROM `maTable`' );
+		 *
+		 * 		$data = $_SESSION['bdd']->query( 'SELECT * FROM `maTable` WHERE `tab_id` = :code' , array('code'=>$codeTable) );
+		 *
+		 * 		$data = $_SESSION['bdd']->query( 'SELECT COUNT(*) AS alias_nombre FROM `maTable` WHERE `tab_id` = :code' ,
 		 * 			array('code'=>$codeTable) ,
 		 * 			Bdd::SINGLE_RES );
-		 * 		$data = $_SESSION['bdd']->query( 'SELECT * FROM table WHERE tab_code = :code AND tab_pays = :pays' ,
+		 *
+		 * 		$data = $_SESSION['bdd']->query( 'SELECT * FROM `maTable` WHERE `tab_id` = :code AND `tab_pays` = :pays' ,
 		 * 			array('code'=>$codeTable , 'pays'=> $pays) );
 		 *
 		 * On recupere les valeurs en utilisent le nom de la colonne dans la table (ou l'alias via "AS mon_alias")
-		 * dans le cas du SINGLE_RES, on a directement un OBJET dans data :
+		 * - Dans le cas du SINGLE_RES, on a directement un OBJET dans data :
 		 * 		echo $data->tab_colonne_1;
 		 * 		echo $data->mon_alias;
-		 * Sinon il faut faire une boucle dans le tableau (array) :
+		 * - Sinon il faut faire une boucle dans le tableau (array) :
 		 * 		foreach($data as $unObjet){
 		 * 			echo $unObjet->tab_colonne_2;
 		 * 		}
@@ -185,8 +190,19 @@ class Bdd
 			{
 					// on prepare la requete SQL
 				$req = $this->oBdd->prepare($sql);
+					// on lie les elements a la requete
+				foreach ($arg as $key => &$value){
+						// on regarde si il y a type integer a forcer
+					if (is_int($value))
+						$req->bindParam($key, $value, PDO::PARAM_INT);
+					else
+						$req->bindParam($key, $value, PDO::PARAM_STR);
+				}
+					// on evite les bug lie a la reference
+				unset($value);
+
 					// on l'execute avec les variables
-				$req->execute($arg);
+				$req->execute();
 			}
 			else
 			{
@@ -213,7 +229,7 @@ class Bdd
 	}
 
 		/**
-		 * execute une requete SQL (DELETE, INSERT INTO, UPDATE)
+		 * execute une requete SQL (type DELETE, INSERT INTO, UPDATE)
 		 *
 		 * On lui passe la requete SQL avec les marqueurs.
 		 * 	un marqueur est une string avec ':' devant
@@ -226,7 +242,9 @@ class Bdd
 		 *
 		 * La requete prend donc ces formes :
 		 * 		$data = $_SESSION['bdd']->exec( 'DELETE FROM table WHERE tab_connexion < 6' );
+		 *
 		 * 		$data = $_SESSION['bdd']->exec( 'DELETE FROM table WHERE tab_val = :code' , array('code'=>$codeTable) );
+		 *
 		 * 		$data = $_SESSION['bdd']->exec( 'INSERT INTO table (`tab_colonne_1`,`tab_colonne_2`) VALUES (:valeur1,:valeur2)' ,
 		 * 			array('valeur1'=>$val1 , 'valeur2'=> $val2) );
 		 *
@@ -242,11 +260,21 @@ class Bdd
 				// on regarde si on a des variable en arguments
 			if(!empty($arg))
 			{
-					// on prepare la requete
+					// on prepare la requete SQL
 				$req = $this->oBdd->prepare($sql);
+					// on lie les elements a la requete
+				foreach ($arg as $key => &$value){
+						// on regarde si il y a type integer a forcer
+					if (is_int($value))
+						$req->bindParam($key, $value, PDO::PARAM_INT);
+					else
+						$req->bindParam($key, $value, PDO::PARAM_STR);
+				}
+					// on evite les bug lie a la reference
+				unset($value);
 
-					// on l'execute avec les arguments
-				if($out = $req->execute($arg)){
+					// on l'execute
+				if($out = $req->execute()){
 						// si pas de probleme, on compte le nombre de ligne affectee
 					$out = $req->rowCount();
 				}
