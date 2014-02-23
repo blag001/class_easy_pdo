@@ -16,11 +16,11 @@ Elle a deux méthodes à utiliser :
 
 ### ->query()
 
-Passe une requete SQL avec ou sans variable (SELECT)
+Passe une requete SQL avec ou sans variable (type SELECT)
 
 Retourne
-- soit **un OBJET** si `$mono_line` a TRUE ou `Bdd::SINGLE_RES`,
-- soit **un ARRAY d'OBJET** si `$mono_line` a FALSE ou NULL
+- soit **un OBJET** si `$mono_line` a `Bdd::SINGLE_RES` (ou TRUE),
+- soit **un ARRAY d'OBJET** si `$mono_line` a FALSE ou NULL (par defaut)
 
 On lui passe la **requete SQL** avec le(s) marqueur(s).
  Un marqueur est une string avec ':' devant.
@@ -41,12 +41,15 @@ La methode vous retourneras alors directement un **OBJET**
 La requête prend donc ces formes :
 ```php
 <?php
-$data = $_SESSION['bdd']->query( "SELECT * FROM table" );
-$data = $_SESSION['bdd']->query( "SELECT * FROM table WHERE tab_code = :code" , array('code'=>$codeTable) );
-$data = $_SESSION['bdd']->query( "SELECT COUNT(*) AS alias_nombre FROM table WHERE tab_code = :code" ,
-	array('code'=>$codeTable) , Bdd::SINGLE_RES );
-$data = $_SESSION['bdd']->query( "SELECT * FROM table WHERE tab_code = :code AND tab_pays = :pays" ,
-	array('code'=>$codeTable , 'pays'=> $pays) );?>
+$data = $_SESSION['bdd']->query( "SELECT * FROM maTable" );
+
+$data = $_SESSION['bdd']->query( "SELECT * FROM maTable WHERE tab_id = :id" , array('id'=>$idTable) );
+
+$data = $_SESSION['bdd']->query( "SELECT COUNT(*) AS alias_nombre FROM maTable WHERE tab_id = :id" ,
+	array('id'=>$idTable) , Bdd::SINGLE_RES );
+
+$data = $_SESSION['bdd']->query( "SELECT * FROM maTable WHERE tab_id = :id AND tab_pays = :pays" ,
+	array('id'=>$idTable , 'pays'=> $pays) );?>
 ```
 
 On recupere les valeurs en utilisent le nom de la colonne dans la table (ou l'alias via `AS mon_alias`), dans le cas du `Bdd::SINGLE_RES`, on a directement un OBJET dans data :
@@ -63,7 +66,7 @@ foreach($data as $unObjet){
 
 ### ->exec()
 
-Execute une requete SQL (DELETE, INSERT INTO, UPDATE)
+Execute une requete SQL (type DELETE, INSERT INTO, UPDATE)
 
 On lui passe la **requete SQL** avec les marqueurs.
 Un marqueur est une string avec `:` devant :
@@ -78,9 +81,9 @@ On lui donne **les arguments** dans un tableau.
 La requete prend donc ces formes :
 ```php
 <?php
-$data = $_SESSION['bdd']->exec( "DELETE FROM table WHERE tab_connexion < 6" );
-$data = $_SESSION['bdd']->exec( "DELETE FROM table WHERE tab_val = :code" , array('code'=>$codeTable) );
-$data = $_SESSION['bdd']->exec( "INSERT INTO table (`tab_colonne_1`,`tab_colonne_2`) VALUES (:valeur1,:valeur2)" ,
+$data = $_SESSION['bdd']->exec( "DELETE FROM maTable WHERE tab_connexion < 6" );
+$data = $_SESSION['bdd']->exec( "DELETE FROM maTable WHERE tab_val = :code" , array('code'=>$codeTable) );
+$data = $_SESSION['bdd']->exec( "INSERT INTO maTable (`tab_colonne_1`,`tab_colonne_2`) VALUES (:valeur1,:valeur2)" ,
  			array('valeur1'=>$val1 , 'valeur2'=> $val2) ); ?>
 ```
 
@@ -93,8 +96,9 @@ Ensuite, la page d'instanciation :
 `/inc/connexion.inc.php`
 
 Juste le code dans `new Bdd()` à changer suivant votre configuration :
-- passez `null,null,null,null` si vous voulez utiliser les valeurs par défaut,
+- passez `null,null,null,null,false` si vous voulez utiliser les valeurs par défaut,
 - Sinon remplacez comme indiqué dans les commentaires
+- une fois en preduction utilisez `TRUE` en 5eme paramètre
 
 Et le bout d'index qui va bien :
 --------------------------------------------------------------
@@ -103,7 +107,7 @@ Et le bout d'index qui va bien :
 
 En gros vous avez trois lignes à ajouter à en haut de l'index principal.
 
-**/!\ Attention à l'ordre de ces lignes, sinon GROS BUG... /!\**
+** /!\ Attention à l'ordre de ces lignes, sinon GROS BUG... /!\ **
 
 Autre exemple :
 ---------------
@@ -114,11 +118,8 @@ J'ajoute aussi un bout de code de démo (c'est un model tiré du MVC [VLyon](htt
 <?php
 class OdbBonIntervention
 {
-	private $oBdd;
-
 	public function __construct()
 	{
-		$this->oBdd = $_SESSION['bdd'];
 	}
 
 	public function estBonInter($code)
@@ -129,7 +130,7 @@ class OdbBonIntervention
 					FROM BONINTERV
 					WHERE BI_Num = :code";
 
-			$data = $this->oBdd->query($req , array('code'=>$code), Bdd::SINGLE_RES);
+			$data = $_SESSION['bdd']->query($req , array('code'=>$code), Bdd::SINGLE_RES);
 
 			return (bool) $data->nb;
 		}
@@ -146,7 +147,7 @@ class OdbBonIntervention
 					WHERE BI_Num = :code
 						AND BI_Technicien = :techCode";
 
-			$data = $this->oBdd->query($req ,
+			$data = $_SESSION['bdd']->query($req ,
 				array('code'=>$code, 'techCode'=>$techCode),
 				Bdd::SINGLE_RES);
 
@@ -163,7 +164,7 @@ class OdbBonIntervention
 					DATE_FORMAT(BI_DatFin, '%d/%m/%Y') AS BI_DatFin
 				FROM BONINTERV";
 
-		$lesBonsInter = $this->oBdd->query($req);
+		$lesBonsInter = $_SESSION['bdd']->query($req);
 
 		return $lesBonsInter;
 	}
@@ -177,7 +178,7 @@ class OdbBonIntervention
 				WHERE BI_Num = :code
 					AND BI_Technicien = :techCode";
 
-		$leBonInter = $this->oBdd->query($req,
+		$leBonInter = $_SESSION['bdd']->query($req,
 			array('code'=>$code, 'techCode'=>$techCode),
 			Bdd::SINGLE_RES);
 
@@ -198,7 +199,7 @@ class OdbBonIntervention
 				WHERE BI_Technicien = :techCode
 					AND BONINTERV.BI_Velo = VELO.Vel_Num";
 
-		$lesBonsInter = $this->oBdd->query($req, array('techCode'=>$techCode));
+		$lesBonsInter = $_SESSION['bdd']->query($req, array('techCode'=>$techCode));
 
 		return $lesBonsInter;
 	}
@@ -233,7 +234,7 @@ class OdbBonIntervention
 					 :duree
 				 	)';
 
-		$out = $this->oBdd->exec($req, array(
+		$out = $_SESSION['bdd']->exec($req, array(
 				 'code'=>$code,
 				 'veloCode'=>$_POST['veloCode'],
 				 'dateDebut'=>$_POST['dateDebut'],
@@ -261,7 +262,7 @@ class OdbBonIntervention
 					AND BI_Technicien = :techCode"
 					;
 
-		$lesBonsInter = $this->oBdd->query($req,
+		$lesBonsInter = $_SESSION['bdd']->query($req,
 			array('valeur'=>'%'.$valeur.'%', 'techCode'=>$techCode));
 
 		return $lesBonsInter;
