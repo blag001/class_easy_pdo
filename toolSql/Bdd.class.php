@@ -8,13 +8,17 @@
 	 * class de gestion PDO simplifiee
 	 *
 	 * - method query() :
+	 * ```php
 	 * 		array|object = query(string $sql[, array $arg[, bool $mono_line]])
+	 * ```
 	 *
 	 * lance une recherche qui attend un ou plusieurs resultats
 	 * (retour en **objet** ou **array d'objet**)
 	 *
 	 * - method exec() :
+	 * ```php
 	 * 		int = exec(string $sql[, array $arg])
+	 * ```
 	 *
 	 * execute une commande et retourne le **nombre de lignes** affectees
 	 *
@@ -166,8 +170,10 @@ class Bdd
 		 *
 		 * On lui donne en 2nd parametre les arguments dans un tableau (aussi nommé array).
 		 * L'array doit etre associatif `marqueur => valeur`
-		 * 		ex : 'array('mon_marqueur' => $maVariable)'
-		 * 		ex : 'array('marqueur1' => $var1, 'marqueur2'=> $var2)'
+		 * ```php
+		 * 		array('mon_marqueur' => $maVariable);
+		 * 		array('marqueur1' => $var1, 'marqueur2'=> $var2);
+		 * ```
 		 *
 		 * Si vous savez que vous allez avoir un seul resultat
 		 * (par ex, un `COUNT(*)`, un `getUn...()` )
@@ -175,6 +181,7 @@ class Bdd
 		 * la methode vous retourneras directement un **objet**
 		 *
 		 * La requete prend donc ces formes :
+		 * ```php
 		 * 		$sql  = 'SELECT * FROM `maTable`';
 		 * 		$data = $_SESSION['bdd']->query( $sql );
 		 *
@@ -200,17 +207,22 @@ class Bdd
 		 * 				'nb_total'=> intval($nb_total),
 		 * 				)
 		 * 			);
+		 * ```
 		 *
 		 * *Attention, pour les `LIMIT` il faut forcer la variable en integer, via `intval()`*
 		 *
 		 * On recupere les valeurs en utilisent le nom de la colonne dans la table (ou l'alias via `AS mon_alias`)
 		 * - Dans le cas du `Bdd::SINGLE_RES`, on a directement un **objet** dans data :
+		 * ```php
 		 * 		echo $data->tab_colonne_1;
 		 * 		echo $data->mon_alias;
+		 * ```
 		 * - Sinon il faut faire une boucle dans le tableau (**array**) :
+		 * ```php
 		 * 		foreach($data as $unObjet){
 		 * 			echo $unObjet->tab_colonne_2;
 		 * 		}
+		 * ```
 		 *
 		 * @api
 		 *
@@ -275,10 +287,13 @@ class Bdd
 		 *
 		 * On lui donne les arguments dans un tableau.
 		 * L'array doit etre associatif `marqueur => valeur`
-		 * 		ex : 'array('mon_marqueur' => $codeTable)'
-		 * 		ex : 'array('marqueur1' => $clause1, 'marqueur2'=>$clause2)'
+		 * ```php
+		 * 		array('mon_marqueur' => $codeTable);
+		 * 		array('marqueur1' => $clause1, 'marqueur2'=>$clause2);
+		 * ```
 		 *
 		 * La requete prend donc ces formes :
+		 * ```php
 		 * 		$sql  = 'DELETE FROM `table` WHERE `tab_connexion` < 6';
 		 * 		$data = $_SESSION['bdd']->exec( $sql );
 		 *
@@ -294,6 +309,7 @@ class Bdd
 		 * 				'valeur2'=> $val2,
 		 * 				)
 		 * 			);
+		 * ```
 		 *
 		 * retourne le nombre de ligne affectee
 		 *
