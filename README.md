@@ -19,11 +19,11 @@ Elle a deux méthodes à utiliser :
 Passe une requete SQL avec ou sans variable (type SELECT)
 
 Retourne
-- soit **un OBJET** si `$mono_line` a `Bdd::SINGLE_RES` (ou TRUE),
-- soit **un ARRAY d'OBJET** si `$mono_line` a FALSE ou NULL (par defaut)
+- soit **un objet** si `$mono_line` a `Bdd::SINGLE_RES` (ou TRUE),
+- soit **un array d'objet** si `$mono_line` a FALSE ou NULL (par defaut)
 
 On lui passe la **requete SQL** avec le(s) marqueur(s).
- Un marqueur est une string avec ':' devant.
+ Un marqueur est une string avec `:` devant.
 
 - ex : `SELECT * FROM table WHERE tab_code = :mon_marqueur`
 
@@ -36,27 +36,51 @@ On lui donne **les arguments** dans un tableau (aussi nomme array).
 Si vous savez que vous allez avoir un seul resultat *(par ex, un `COUNT()`, un `getUn...()` )*,
 utilisez en 3ème parametre de `query()` **la constante** `Bdd::SINGLE_RES` (ou TRUE).
 
-La methode vous retourneras alors directement un **OBJET**
+La methode vous retourneras alors directement un **objet**
 
 La requête prend donc ces formes :
 ```php
 <?php
-$data = $_SESSION['bdd']->query( "SELECT * FROM maTable" );
+$sql  = 'SELECT * FROM `maTable`';
+$data = $_SESSION['bdd']->query( $sql );
 
-$data = $_SESSION['bdd']->query( "SELECT * FROM maTable WHERE tab_id = :id" , array('id'=>$idTable) );
+$sql  = 'SELECT * FROM `maTable` WHERE `tab_id` = :code';
+$data = $_SESSION['bdd']->query( $sql , array('code'=>$codeTable) );
 
-$data = $_SESSION['bdd']->query( "SELECT COUNT(*) AS alias_nombre FROM maTable WHERE tab_id = :id" ,
-	array('id'=>$idTable) , Bdd::SINGLE_RES );
+$sql  = 'SELECT COUNT(*) AS `alias_nombre` FROM `maTable` WHERE `tab_id` = :code';
+$data = $_SESSION['bdd']->query(
+	$sql ,
+	array('code'=>$codeTable) ,
+	Bdd::SINGLE_RES );
 
-$data = $_SESSION['bdd']->query( "SELECT * FROM maTable WHERE tab_id = :id AND tab_pays = :pays" ,
-	array('id'=>$idTable , 'pays'=> $pays) );?>
+$sql  = 'SELECT * FROM `maTable`
+	WHERE `tab_id` = :code
+		AND `tab_pays` = :pays
+	LIMIT :start, :nb_total';
+$data = $_SESSION['bdd']->query(
+	$sql ,
+	array(
+		'code'=>$codeTable ,
+		'pays'=> $pays,
+		'start'=> intval($start),
+		'nb_total'=> intval($nb_total),
+		)
+	); ?>
 ```
 
-On recupere les valeurs en utilisent le nom de la colonne dans la table (ou l'alias via `AS mon_alias`), dans le cas du `Bdd::SINGLE_RES`, on a directement un OBJET dans data :
-- `echo $data->tab_colonne_1;`
-- `echo $data->mon_alias;`
+*Attention, pour les `LIMIT` il faut forcer la variable en integer, via `intval()`*
 
-Sinon il faut faire une boucle dans le tableau (array) :
+On recupere les valeurs en utilisent le nom de la colonne dans la table (ou l'alias via `AS mon_alias`)
+- Dans le cas du `Bdd::SINGLE_RES`, on a directement un OBJET dans data :
+
+```php
+<?php
+echo $data->tab_colonne_1;
+echo $data->mon_alias; ?>
+```
+
+- Sinon il faut faire une boucle dans le tableau (array) :
+
 ```php
 <?php
 foreach($data as $unObjet){
@@ -81,10 +105,21 @@ On lui donne **les arguments** dans un tableau.
 La requete prend donc ces formes :
 ```php
 <?php
-$data = $_SESSION['bdd']->exec( "DELETE FROM maTable WHERE tab_connexion < 6" );
-$data = $_SESSION['bdd']->exec( "DELETE FROM maTable WHERE tab_val = :code" , array('code'=>$codeTable) );
-$data = $_SESSION['bdd']->exec( "INSERT INTO maTable (`tab_colonne_1`,`tab_colonne_2`) VALUES (:valeur1,:valeur2)" ,
- 			array('valeur1'=>$val1 , 'valeur2'=> $val2) ); ?>
+$sql  = 'DELETE FROM `table` WHERE `tab_connexion` < 6';
+$data = $_SESSION['bdd']->exec( $sql );
+
+$sql  = 'DELETE FROM `table` WHERE `tab_val` = :code';
+$data = $_SESSION['bdd']->exec( $sql , array('code'=>$codeTable) );
+
+$sql  = 'INSERT INTO `table` (`tab_colonne_1`,`tab_colonne_2`)
+	VALUES (:valeur1,:valeur2)';
+$data = $_SESSION['bdd']->exec(
+	$sql ,
+	array(
+		'valeur1'=>$val1,
+		'valeur2'=> $val2,
+		)
+	); ?>
 ```
 
 Cette methode retourne le **nombre de ligne** affectée.
@@ -95,17 +130,17 @@ Ensuite, la page d'instanciation :
 
 `/inc/connexion.inc.php`
 
-Juste le code dans `new Bdd()` à changer suivant votre configuration :
+Juste les valeurs dans `new Bdd()` à changer suivant votre configuration :
 - passez `null,null,null,null,false` si vous voulez utiliser les valeurs par défaut,
 - Sinon remplacez comme indiqué dans les commentaires
-- une fois en preduction utilisez `TRUE` en 5eme paramètre
+- une fois en production utilisez `TRUE` en 5eme paramètre
 
-Et le bout d'index qui va bien :
+Le bout d'index qui va bien :
 --------------------------------------------------------------
 
 `/index.php`
 
-En gros vous avez trois lignes à ajouter à en haut de l'index principal.
+En gros vous avez trois lignes à ajouter en haut de l'index principal.
 
 ** /!\ Attention à l'ordre de ces lignes, sinon GROS BUG... /!\ **
 
@@ -121,7 +156,11 @@ class OdbBonIntervention
 	public function __construct()
 	{
 	}
-
+		/**
+		 * verifie si le code correspond à un bon d'intervention
+		 * @param  integer $code le code du bon d'intervention
+		 * @return bool       TRUE/FALSE si est ou n'est pas un bon
+		 */
 	public function estBonInter($code)
 	{
 		if(!empty($code))
@@ -137,7 +176,12 @@ class OdbBonIntervention
 
 		return false;
 	}
-
+		/**
+		 * test si le n° de bon est bien un bon réalisé par le technicien
+		 * @param  integer $code     le code du bon
+		 * @param  integer $techCode le code du technicien
+		 * @return bool           TRUE/FALSE si est/n'est pas un bon du technicien
+		 */
 	public function estMonBonInter($code, $techCode)
 	{
 		if(!empty($code) and !empty($techCode))
@@ -156,7 +200,10 @@ class OdbBonIntervention
 
 		return false;
 	}
-
+		/**
+		 * récupère les bon d'interventions et formate la date en Fr
+		 * @return array tableau d'objet avec le contenue des bons
+		 */
 	public function getLesBonsInter()
 	{
 		$req = "SELECT *,
@@ -168,7 +215,12 @@ class OdbBonIntervention
 
 		return $lesBonsInter;
 	}
-
+		/**
+		 * récupère une intervention par son code
+		 * @param  integer $code     le code du bon
+		 * @param  integer $techCode le code du technicien
+		 * @return object           un objet qui contien les données du bon
+		 */
 	public function getMonBonInter($code, $techCode)
 	{
 		$req = "SELECT *,
@@ -185,11 +237,11 @@ class OdbBonIntervention
 		return $leBonInter;
 	}
 
-	/**
-	 * on visualise les interventions effectuees par un technicien gràce à son matricule
-	 * @param  int $techCode matricule du technincient
-	 * @return array           tableau d'objets
-	 */
+		/**
+		 * récupère les interventions d'un technicien via son matricule
+		 * @param  integer $techCode matricule du technincien
+		 * @return array           tableau d'objets des bons d'interventions
+		 */
 	public function getMesInterventions($techCode)
 	{
 		$req = "SELECT *,
@@ -204,9 +256,11 @@ class OdbBonIntervention
 		return $lesBonsInter;
 	}
 
-	/**
-	 * on cree une intervention
-	 */
+		/**
+		 * On cree une intervention
+		 * @param  integer $code code du bon à créer
+		 * @return integer       nombre de ligne créé
+		 */
 	public function creerUnBonInter($code)
 	{
 		$req = 'INSERT INTO BONINTERV (
@@ -248,7 +302,12 @@ class OdbBonIntervention
 				));
 		return $out;
 	}
-
+		/**
+		 * recherche les intervention d'un technicien va une valeur
+		 * @param  string $valeur   terme recherché
+		 * @param  integer $techCode le code du technicien
+		 * @return array           tableau d'objet des bons d'interventions
+		 */
 	public function searchMesBonIntervention($valeur, $techCode)
 	{
 		$req = "SELECT *

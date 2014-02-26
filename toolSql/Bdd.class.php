@@ -20,7 +20,7 @@
 	 *
 	 * @global boolean SINGLE_RES
 	 * @author Benoit <benoitelie1@gmail.com>
-	 * @version v.4.0.1
+	 * @version v.4.0.2
 	 * @link https://github.com/blag001/class_easy_pdo depot GitHub
 	 */
 class Bdd
@@ -181,8 +181,9 @@ class Bdd
 		 * 		$sql  = 'SELECT * FROM `maTable` WHERE `tab_id` = :code';
 		 * 		$data = $_SESSION['bdd']->query( $sql , array('code'=>$codeTable) );
 		 *
-		 * 		$sql  = 'SELECT COUNT(*) AS alias_nombre FROM `maTable` WHERE `tab_id` = :code';
-		 * 		$data = $_SESSION['bdd']->query( $sql ,
+		 * 		$sql  = 'SELECT COUNT(*) AS `alias_nombre` FROM `maTable` WHERE `tab_id` = :code';
+		 * 		$data = $_SESSION['bdd']->query(
+		 * 			$sql ,
 		 * 			array('code'=>$codeTable) ,
 		 * 			Bdd::SINGLE_RES );
 		 *
@@ -269,8 +270,8 @@ class Bdd
 		 *
 		 * On lui passe en 1er parametre la requete SQL avec le(s) marqueur(s).
 		 * Un marqueur est une string avec `:` devant
-		 * 		ex : 'DELETE FROM table WHERE tab_code = :mon_marqueur '
-		 * 		ex : 'DELETE FROM table WHERE tab_val > :marqueur1 AND tab_type = :marqueur2 '
+		 * 		ex : 'DELETE FROM `table` WHERE `tab_code` = :mon_marqueur '
+		 * 		ex : 'DELETE FROM `table` WHERE `tab_val` > :marqueur1 AND `tab_type` = :marqueur2 '
 		 *
 		 * On lui donne les arguments dans un tableau.
 		 * L'array doit etre associatif `marqueur => valeur`
@@ -278,19 +279,19 @@ class Bdd
 		 * 		ex : 'array('marqueur1' => $clause1, 'marqueur2'=>$clause2)'
 		 *
 		 * La requete prend donc ces formes :
-		 * 		$sql  = 'DELETE FROM table WHERE tab_connexion < 6';
+		 * 		$sql  = 'DELETE FROM `table` WHERE `tab_connexion` < 6';
 		 * 		$data = $_SESSION['bdd']->exec( $sql );
 		 *
-		 * 		$sql  = 'DELETE FROM table WHERE tab_val = :code';
+		 * 		$sql  = 'DELETE FROM `table` WHERE `tab_val` = :code';
 		 * 		$data = $_SESSION['bdd']->exec( $sql , array('code'=>$codeTable) );
 		 *
-		 * 		$sql  = 'INSERT INTO table (`tab_colonne_1`,`tab_colonne_2`)
+		 * 		$sql  = 'INSERT INTO `table` (`tab_colonne_1`,`tab_colonne_2`)
 		 * 			VALUES (:valeur1,:valeur2)';
 		 * 		$data = $_SESSION['bdd']->exec(
 		 * 			$sql ,
 		 * 			array(
 		 * 				'valeur1'=>$val1 ,
-		 * 				'valeur2'=> $val2
+		 * 				'valeur2'=> $val2,
 		 * 				)
 		 * 			);
 		 *
