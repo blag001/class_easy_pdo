@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+    <meta charset="utf-8"/>
+    <title>API Documentation</title>
+    <meta name="author" content=""/>
+    <meta name="description" content=""/>
+
+    <link href="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.no-icons.min.css" rel="stylesheet">
+    <link href="https://netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/prism.css" rel="stylesheet" media="all"/>
+    <link href="../css/template.css" rel="stylesheet" media="all"/>
+    
+    <!--[if lt IE 9]>
+    <script src="https://html5shim.googlecode.com/svn/trunk/html5.js" type="text/javascript"></script>
+    <![endif]-->
+    <script src="https://code.jquery.com/jquery-1.10.2.min.js" type="text/javascript"></script>
+    <script src="https://code.jquery.com/ui/1.10.3/jquery-ui.min.js" type="text/javascript"></script>
+    <script src="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+    <script src="../js/jquery.smooth-scroll.js"></script>
+    <script src="../js/prism.min.js"></script>
+    <!-- TODO: Add http://jscrollpane.kelvinluck.com/ to style the scrollbars for browsers not using webkit-->
+    <script type="text/javascript">
+    function loadExternalCodeSnippets() {
+        Array.prototype.slice.call(document.querySelectorAll('pre[data-src]')).forEach(function (pre) {
+            var src = pre.getAttribute('data-src');
+            var extension = (src.match(/\.(\w+)$/) || [, ''])[1];
+            var language = 'php';
+
+            var code = document.createElement('code');
+            code.className = 'language-' + language;
+
+            pre.textContent = '';
+
+            code.textContent = 'Loading…';
+
+            pre.appendChild(code);
+
+            var xhr = new XMLHttpRequest();
+
+            xhr.open('GET', src, true);
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4) {
+
+                    if (xhr.status < 400 && xhr.responseText) {
+                        code.textContent = xhr.responseText;
+
+                        Prism.highlightElement(code);
+                    }
+                    else if (xhr.status >= 400) {
+                        code.textContent = '✖ Error ' + xhr.status + ' while fetching file: ' + xhr.statusText;
+                    }
+                    else {
+                        code.textContent = '✖ Error: File does not exist or is empty';
+                    }
+                }
+            };
+
+            xhr.send(null);
+        });
+    }
+
+    $(document).ready(function(){
+        loadExternalCodeSnippets();
+    });
+    $('#source-view').on('shown', function () {
+        loadExternalCodeSnippets();
+    })
+</script>
+
+    <link rel="shortcut icon" href="../images/favicon.ico"/>
+    <link rel="apple-touch-icon" href="../images/apple-touch-icon.png"/>
+    <link rel="apple-touch-icon" sizes="72x72" href="../images/apple-touch-icon-72x72.png"/>
+    <link rel="apple-touch-icon" sizes="114x114" href="../images/apple-touch-icon-114x114.png"/>
+</head>
+<body>
+
+<div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <i class="icon-ellipsis-vertical"></i>
+            </a>
+            <a class="brand" href="../index.html">API Documentation</a>
+
+            <div class="nav-collapse">
+                <ul class="nav pull-right">
+                    <li class="dropdown">
+                        <a href="../index.html" class="dropdown-toggle" data-toggle="dropdown">
+                            API Documentation <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                                                    </ul>
+                    </li>
+                    <li class="dropdown" id="charts-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            Charts <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="../graphs/class.html">
+                                    <i class="icon-list-alt"></i>&#160;Class hierarchy diagram
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="dropdown" id="reports-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            Reports <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="../reports/errors.html">
+                                                                                                                                                                                                                                                                                                                                                <i class="icon-list-alt"></i>&#160;Errors <span class="label label-info pull-right">0</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="../reports/markers.html">
+                                                                                                                                                                                                                                                                                                                                                <i class="icon-list-alt"></i>&#160;Markers <span class="label label-info pull-right">0</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!--<div class="go_to_top">-->
+    <!--<a href="#___" style="color: inherit">Back to top&#160;&#160;<i class="icon-upload icon-white"></i></a>-->
+    <!--</div>-->
+</div>
+
+<div id="___" class="container-fluid">
+        <section class="row-fluid">
+        <div class="span2 sidebar">
+                                <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-191885662"></a>
+                                <a href="../namespaces/default.html" style="margin-left: 30px; padding-left: 0">\</a>
+            </div>
+            <div id="namespace-191885662" class="accordion-body collapse in">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/Bdd.html">Bdd</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        </div>
+    </section>
+    <section class="row-fluid">
+        <div class="span10 offset2">
+            <div class="row-fluid">
+                <div class="span8 content class">
+                    <nav>
+                                                <a href="../namespaces/default.html">\</a> <i class="icon-level-up"></i>
+                                            </nav>
+                    <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal"><i class="icon-code"></i></a>
+
+                    <h1><small>\</small>Bdd</h1>
+                    <p><em>class de gestion PDO simplifiee</em></p>
+                    <ul>
+<li>method query() :<pre><code class="language-php">    array|object = query(string $sql[, array $arg[, bool $mono_line]])</code></pre>
+</li>
+</ul>
+<p>lance une recherche qui attend un ou plusieurs resultats
+(retour en <strong>objet</strong> ou <strong>array d'objet</strong>)</p>
+<ul>
+<li>method exec() :<pre><code class="language-php">    int = exec(string $sql[, array $arg])</code></pre>
+</li>
+</ul>
+<p>execute une commande et retourne le <strong>nombre de lignes</strong> affectees</p>
+
+                    <section id="summary">
+                        <h2>Summary</h2>
+                        <section class="row-fluid heading">
+                            <section class="span4">
+                                <a href="#methods">Methods</a>
+                            </section>
+                            <section class="span4">
+                                <a href="#properties">Properties</a>
+                            </section>
+                            <section class="span4">
+                                <a href="#constants">Constants</a>
+                            </section>
+                        </section>
+                        <section class="row-fluid public">
+                            <section class="span4">
+                                                                    <a href="../classes/Bdd.html#method___construct" class="">__construct()</a><br />
+                                                                    <a href="../classes/Bdd.html#method___sleep" class="">__sleep()</a><br />
+                                                                    <a href="../classes/Bdd.html#method___wakeup" class="">__wakeup()</a><br />
+                                                                    <a href="../classes/Bdd.html#method_query" class="">query()</a><br />
+                                                                    <a href="../classes/Bdd.html#method_exec" class="">exec()</a><br />
+                                                            </section>
+                            <section class="span4">
+                                                                    <em>No public properties found</em>
+                                                            </section>
+                            <section class="span4">
+                                                                    <a href="../classes/Bdd.html#constant_SINGLE_RES" class="">SINGLE_RES</a><br />
+                                                            </section>
+                        </section>
+                        <section class="row-fluid protected">
+                            <section class="span4">
+                                                                    <em>No protected methods found</em>
+                                                            </section>
+                            <section class="span4">
+                                                                    <em>No protected properties found</em>
+                                                            </section>
+                            <section class="span4">
+                                <em>N/A</em>
+                            </section>
+                        </section>
+                        <section class="row-fluid private">
+                            <section class="span4">
+                                                                    <a href="../classes/Bdd.html#method__connexion" class="">_connexion()</a><br />
+                                                                    <a href="../classes/Bdd.html#method__showError" class="">_showError()</a><br />
+                                                            </section>
+                            <section class="span4">
+                                                                    <a href="../classes/Bdd.html#property_host" class="">$host</a><br />
+                                                                    <a href="../classes/Bdd.html#property_db_name" class="">$db_name</a><br />
+                                                                    <a href="../classes/Bdd.html#property_user" class="">$user</a><br />
+                                                                    <a href="../classes/Bdd.html#property_mdp" class="">$mdp</a><br />
+                                                                    <a href="../classes/Bdd.html#property_production" class="">$production</a><br />
+                                                                    <a href="../classes/Bdd.html#property_oBdd" class="">$oBdd</a><br />
+                                                            </section>
+                            <section class="span4">
+                                <em>N/A</em>
+                            </section>
+                        </section>
+                    </section>
+                </div>
+                <aside class="span4 detailsbar">
+                                        
+                    
+                    <dl>
+                        <dt>File</dt>
+                            <dd><a href="../files/toolSql.Bdd.class.php.html"><div class="path-wrapper">toolSql/Bdd.class.php</div></a></dd>
+                                                <dt>Package</dt>
+                            <dd><div class="namespace-wrapper">\Default</div></dd>
+                                                <dt>Class hierarchy</dt>
+                            <dd class="hierarchy">
+                                                                                                                                                                    <div class="namespace-wrapper">\Bdd</div>
+                            </dd>
+
+                        
+                        
+                        
+                                                                            <dt>See also</dt>
+                                                                                    <dd><a href="https://github.com/blag001/class_easy_pdo"><div class="namespace-wrapper">depot GitHub</div></a></dd>
+                                                    
+                                                                        </dl>
+                    <h2>Tags</h2>
+                    <table class="table table-condensed">
+                                            <tr>
+                            <th>
+                                global
+                            </th>
+                            <td>
+                                                                    <p>boolean SINGLE_RES</p>
+                                                            </td>
+                        </tr>
+                                            <tr>
+                            <th>
+                                author
+                            </th>
+                            <td>
+                                                                    <p>Benoit <benoitelie1@gmail.com></p>
+                                                            </td>
+                        </tr>
+                                            <tr>
+                            <th>
+                                version
+                            </th>
+                            <td>
+                                                                    <p>v.4.0.2</p>
+                                                            </td>
+                        </tr>
+                                            <tr>
+                            <th>
+                                todo
+                            </th>
+                            <td>
+                                                            </td>
+                        </tr>
+                                        </table>
+                </aside>
+            </div>
+
+                                    <a id="constants" name="constants"></a>
+            <div class="row-fluid">
+                <div class="span8 content class">
+                    <h2>Constants</h2>
+                </div>
+                <aside class="span4 detailsbar"></aside>
+            </div>
+
+                                <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_SINGLE_RES" name="constant_SINGLE_RES" class="anchor"></a>
+            <article id="constant_SINGLE_RES" class="constant">
+                <h3 class="">SINGLE_RES</h3>
+                <pre class="signature">SINGLE_RES</pre>
+                <p><em>constante à utiliser en cas de resultat unique attendu</em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            todo
+                        </th>
+                        <td>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                            
+                                    <a id="properties" name="properties"></a>
+            <div class="row-fluid">
+                <div class="span8 content class">
+                    <h2>Properties</h2>
+                </div>
+                <aside class="span4 detailsbar"></aside>
+            </div>
+
+                                                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_host" name="property_host" class="anchor"></a>
+            <article class="property">
+                <h3 class="private ">$host</h3>
+                <pre class="signature">$host : string</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                string
+                &mdash; l&#039;host où se trouve la BDD                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            todo
+                        </th>
+                        <td>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_db_name" name="property_db_name" class="anchor"></a>
+            <article class="property">
+                <h3 class="private ">$db_name</h3>
+                <pre class="signature">$db_name : string</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                string
+                &mdash; nom de la base visée par la connexion                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            todo
+                        </th>
+                        <td>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_user" name="property_user" class="anchor"></a>
+            <article class="property">
+                <h3 class="private ">$user</h3>
+                <pre class="signature">$user : string</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                string
+                &mdash; utilisateur a passer lors de la connexion                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            todo
+                        </th>
+                        <td>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_mdp" name="property_mdp" class="anchor"></a>
+            <article class="property">
+                <h3 class="private ">$mdp</h3>
+                <pre class="signature">$mdp : string</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                string
+                &mdash; mot de passe à utiliser avec le nom d&#039;utilisateur                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            todo
+                        </th>
+                        <td>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_production" name="property_production" class="anchor"></a>
+            <article class="property">
+                <h3 class="private ">$production</h3>
+                <pre class="signature">$production : boolean</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                boolean
+                &mdash; mode d&#039;affichage des erreurs                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            todo
+                        </th>
+                        <td>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_oBdd" name="property_oBdd" class="anchor"></a>
+            <article class="property">
+                <h3 class="private ">$oBdd</h3>
+                <pre class="signature">$oBdd : \PDO</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                \PDO
+                &mdash; variable avec l&#039;instance PDO                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            todo
+                        </th>
+                        <td>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                            
+                                    <a id="methods" name="methods"></a>
+            <div class="row-fluid">
+                <div class="span8 content class"><h2>Methods</h2></div>
+                <aside class="span4 detailsbar"></aside>
+            </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method___construct" name="method___construct" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">__construct()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">__construct(string <span class="argument">$host</span>, string <span class="argument">$db_name</span>, string <span class="argument">$user</span>, string <span class="argument">$mdp</span>, string <span class="argument">$production</span>)</pre>
+                <p><em>cree une instance PDO avec les valeurs en argument</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$host</td>
+                                <td><p>l'host a utiliser (localhost par defaut)</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>string</td>
+                                <td>$db_name</td>
+                                <td><p>nom de la base de donnee</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>string</td>
+                                <td>$user</td>
+                                <td><p>utilisateur de la BDD</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>string</td>
+                                <td>$mdp</td>
+                                <td><p>mot de passe de l'utilisateur</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>string</td>
+                                <td>$production</td>
+                                <td><p>desactive les messages d'erreurs</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            api
+                        </th>
+                        <td>
+                                                                                            
+                                                    </td>
+                    </tr>
+                                    <tr>
+                        <th>
+                            todo
+                        </th>
+                        <td>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method___sleep" name="method___sleep" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">__sleep()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">__sleep()</pre>
+                <p><em>variables a sauver a la fin du chargement de page</em></p>
+                
+
+                
+                
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            todo
+                        </th>
+                        <td>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method___wakeup" name="method___wakeup" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">__wakeup()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">__wakeup()</pre>
+                <p><em>reconnect à la BDD au chargement de la page</em></p>
+                
+
+                
+                
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            todo
+                        </th>
+                        <td>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_query" name="method_query" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">query()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">query(string <span class="argument">$sql</span>, array <span class="argument">$arg</span>, boolean <span class="argument">$mono_line</span>) : array|object</pre>
+                <p><em>Passe une requete SQL avec ou sans variable (type SELECT)</em></p>
+                <p>Retourne :</p>
+<ul>
+<li>soit <strong>un objet</strong> si $mono_line a <code>Bdd::SINGLE_RES</code> (ou TRUE),</li>
+<li>soit <strong>un array d'objet</strong> si $mono_line a FALSE ou NULL (par defaut)</li>
+</ul>
+<p>On lui passe en 1er parametre la requete SQL avec le(s) marqueur(s).
+Un marqueur est une string avec <code>:</code> devant</p>
+<pre><code>    ex : 'SELECT * FROM `maTable` WHERE `tab_id` = :mon_marqueur '</code></pre>
+<p>On lui donne en 2nd parametre les arguments dans un tableau (aussi nommé array).
+L'array doit etre associatif <code>marqueur =&gt; valeur</code></p>
+<pre><code class="language-php">        array('mon_marqueur' =&gt; $maVariable);
+        array('marqueur1' =&gt; $var1, 'marqueur2'=&gt; $var2);</code></pre>
+<p>Si vous savez que vous allez avoir un seul resultat
+(par ex, un <code>COUNT(*)</code>, un <code>getUn...()</code> )
+utilisez en 3eme parametre de query() <code>Bdd::SINGLE_RES</code> (ou TRUE)
+la methode vous retourneras directement un <strong>objet</strong></p>
+<p>La requete prend donc ces formes :</p>
+<pre><code class="language-php">        $sql  = 'SELECT * FROM `maTable`';
+        $data = $_SESSION['bdd']-&gt;query( $sql );
+
+        $sql  = 'SELECT * FROM `maTable` WHERE `tab_id` = :code';
+        $data = $_SESSION['bdd']-&gt;query( $sql , array('code'=&gt;$codeTable) );
+
+        $sql  = 'SELECT COUNT(*) AS `alias_nombre` FROM `maTable` WHERE `tab_id` = :code';
+        $data = $_SESSION['bdd']-&gt;query(
+            $sql ,
+            array('code'=&gt;$codeTable) ,
+            Bdd::SINGLE_RES );
+
+        $sql  = 'SELECT * FROM `maTable`
+            WHERE `tab_id` = :code
+                AND `tab_pays` = :pays
+            LIMIT :start, :nb_total';
+        $data = $_SESSION['bdd']-&gt;query(
+            $sql ,
+            array(
+                'code'=&gt;$codeTable ,
+                'pays'=&gt; $pays,
+                'start'=&gt; intval($start),
+                'nb_total'=&gt; intval($nb_total),
+                )
+            );</code></pre>
+<p><em>Attention, pour les <code>LIMIT</code> il faut forcer la variable en integer, via <code>intval()</code></em></p>
+<p>On recupere les valeurs en utilisent le nom de la colonne dans la table (ou l'alias via <code>AS mon_alias</code>)</p>
+<ul>
+<li>Dans le cas du <code>Bdd::SINGLE_RES</code>, on a directement un <strong>objet</strong> dans data :<pre><code class="language-php">    echo $data-&gt;tab_colonne_1;
+    echo $data-&gt;mon_alias;</code></pre>
+</li>
+<li>Sinon il faut faire une boucle dans le tableau (<strong>array</strong>) :<pre><code class="language-php">    foreach($data as $unObjet){
+        echo $unObjet-&gt;tab_colonne_2;
+    }</code></pre>
+</li>
+</ul>
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$sql</td>
+                                <td><p>la requete SQL a executer</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>array</td>
+                                <td>$arg</td>
+                                <td><p>facultatif : le tableau d'arguments</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>boolean</td>
+                                <td>$mono_line</td>
+                                <td><p>facultatif : si le resultat doit etre un objet</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    array|object
+                                            &mdash; <p>retourne un objet ou un tableau (array) d'objets</p>
+                                                </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            api
+                        </th>
+                        <td>
+                                                                                            
+                                                    </td>
+                    </tr>
+                                    <tr>
+                        <th>
+                            todo
+                        </th>
+                        <td>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_exec" name="method_exec" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">exec()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">exec(string <span class="argument">$sql</span>, array <span class="argument">$arg</span>) : int</pre>
+                <p><em>execute une requete SQL (type DELETE, INSERT INTO, UPDATE)</em></p>
+                <p>On lui passe en 1er parametre la requete SQL avec le(s) marqueur(s).
+Un marqueur est une string avec <code>:</code> devant</p>
+<pre><code>    ex : 'DELETE FROM `table` WHERE `tab_code` = :mon_marqueur '
+    ex : 'DELETE FROM `table` WHERE `tab_val` &gt; :marqueur1 AND `tab_type` = :marqueur2 '</code></pre>
+<p>On lui donne les arguments dans un tableau.
+L'array doit etre associatif <code>marqueur =&gt; valeur</code></p>
+<pre><code class="language-php">        array('mon_marqueur' =&gt; $codeTable);
+        array('marqueur1' =&gt; $clause1, 'marqueur2'=&gt;$clause2);</code></pre>
+<p>La requete prend donc ces formes :</p>
+<pre><code class="language-php">        $sql  = 'DELETE FROM `table` WHERE `tab_connexion` &lt; 6';
+        $data = $_SESSION['bdd']-&gt;exec( $sql );
+
+        $sql  = 'DELETE FROM `table` WHERE `tab_val` = :code';
+        $data = $_SESSION['bdd']-&gt;exec( $sql , array('code'=&gt;$codeTable) );
+
+        $sql  = 'INSERT INTO `table` (`tab_colonne_1`,`tab_colonne_2`)
+            VALUES (:valeur1,:valeur2)';
+        $data = $_SESSION['bdd']-&gt;exec(
+            $sql ,
+            array(
+                'valeur1'=&gt;$val1 ,
+                'valeur2'=&gt; $val2,
+                )
+            );</code></pre>
+<p>retourne le nombre de ligne affectee</p>
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$sql</td>
+                                <td><p>la requete SQL a executer</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>array</td>
+                                <td>$arg</td>
+                                <td><p>l'array avec les parametres</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    int
+                                            &mdash; <p>le nombre de ligne affectee</p>
+                                                </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            api
+                        </th>
+                        <td>
+                                                                                            
+                                                    </td>
+                    </tr>
+                                    <tr>
+                        <th>
+                            todo
+                        </th>
+                        <td>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method__connexion" name="method__connexion" class="anchor"></a>
+            <article class="method">
+                <h3 class="private ">_connexion()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">_connexion() : void</pre>
+                <p><em>cree une instance PDO</em></p>
+                <p>Active :</p>
+<ul>
+<li>le mode de recherche en retour d'OBJET</li>
+<li>le mode d'erreur en exception</li>
+<li>l'encodage UTF-8 pour les transactions</li>
+</ul>
+<p><em>Il est conseillé de faire tout votre site en UTF8</em></p>
+
+                
+                
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            todo
+                        </th>
+                        <td>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method__showError" name="method__showError" class="anchor"></a>
+            <article class="method">
+                <h3 class="private ">_showError()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">_showError(\Exception <span class="argument">$e</span>) : void</pre>
+                <p><em>Gère l&#039;affichage des erreurs via exception</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>\Exception</td>
+                                <td>$e</td>
+                                <td><p>une exception capturee</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            todo
+                        </th>
+                        <td>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    </div>
+    </section>
+
+    <div id="source-view" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="source-view-label" aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3 id="source-view-label">Bdd.class.php</h3>
+        </div>
+        <div class="modal-body">
+            <pre data-src="../files/toolSql/Bdd.class.php.txt" class="language-php line-numbers"></pre>
+        </div>
+    </div>
+
+    <footer class="row-fluid">
+        <section class="span10 offset2">
+            <section class="row-fluid">
+                <section class="span10 offset1">
+                    <section class="row-fluid footer-sections">
+                        <section class="span4">
+                                                        <h1><i class="icon-code"></i></h1>
+                            <div>
+                                <ul>
+                                                                    </ul>
+                            </div>
+                        </section>
+                        <section class="span4">
+                                                        <h1><i class="icon-bar-chart"></i></h1>
+                            <div>
+                                <ul>
+                                    <li><a href="../graphs/class.html">Class Hierarchy Diagram</a></li>
+                                </ul>
+                            </div>
+                        </section>
+                        <section class="span4">
+                                                        <h1><i class="icon-pushpin"></i></h1>
+                            <div>
+                                <ul>
+                                    <li><a href="../reports/errors.html">Errors</a></li>
+                                    <li><a href="../reports/markers.html">Markers</a></li>
+                                </ul>
+                            </div>
+                        </section>
+                    </section>
+                </section>
+            </section>
+            <section class="row-fluid">
+                <section class="span10 offset1">
+                    <hr />
+                    Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor </a> and authored
+                    on February 26th, 2014 at 10:42.
+                </section>
+            </section>
+        </section>
+    </footer>
+</div>
+
+</body>
+</html>
