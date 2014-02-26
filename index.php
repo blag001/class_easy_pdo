@@ -1,15 +1,22 @@
 <?php
+/**
+ * Fichier index, déclare la classe et l'instancie
+ *
+ * Ce fichier montre comment vous devez mettre en place la class,
+ * attention a l'ordre des trois lignes.
+ */
+
 //////////////////////////////////
 // chargement et initialisation //
 //////////////////////////////////
 
-// on charge la class de gestion de la BDD
+	/** on charge la class de gestion de la BDD */
 require_once ('toolSql/Bdd.class.php');
 
-// on lance la session qui contiendra la connexion
+	/** on lance la session qui contiendra la connexion */
 session_start();
 
-// on cree l'objet de connexion SQL dans $_SESSION['bdd']
+	/** on cree l'objet de connexion SQL dans $_SESSION['bdd'] */
 require_once 'inc/connexion.inc.php';
 
 //////////////////////////

@@ -1,13 +1,22 @@
 <?php
+/**
+ * ce fichier contient la déclaration de la class
+ *
+ * Si vous le renommez, pensez aussi à changer son appelle dans `index.php`
+ */
 	/**
 	 * class de gestion PDO simplifiee
 	 *
-	 * @method mixed query(string $sql[, array $arg[, bool $mono_line]])
-	 *         			lance une recherche qui attend un ou plusieurs resultats
-	 *         			(retour en OBJET ou array d'OBJET)
+	 * - method query() :
+	 * 		array|object = query(string $sql[, array $arg[, bool $mono_line]])
 	 *
-	 * @method int exec(string $sql[, array $arg])
-	 *         			execute une commande et retourne le nombre de lignes affectees
+	 * lance une recherche qui attend un ou plusieurs resultats
+	 * (retour en **objet** ou **array d'objet**)
+	 *
+	 * - method exec() :
+	 * 		int = exec(string $sql[, array $arg])
+	 *
+	 * execute une commande et retourne le **nombre de lignes** affectees
 	 *
 	 * @global boolean SINGLE_RES
 	 * @author Benoit <benoitelie1@gmail.com>
@@ -17,16 +26,21 @@
 class Bdd
 {
 		// valeur par defaut en cas d'instanciation sans valeur
+		/** @var string l'host où se trouve la BDD */
 	private $host       = 'localhost';
+		/** @var string nom de la base visée par la connexion */
 	private $db_name    = 'test';
+		/** @var string utilisateur a passer lors de la connexion */
 	private $user       = 'root';
+		/** @var string mot de passe à utiliser avec le nom d'utilisateur */
 	private $mdp        = '';
+		/** @var boolean mode d'affichage des erreurs */
 	private $production = false;
 
 		/** @var PDO variable avec l'instance PDO */
 	private $oBdd  = null;
 
-		/** @global constante en cas de resultat unique */
+		/** constante à utiliser en cas de resultat unique attendu */
 	const SINGLE_RES = true;
 
 	////////////////////
@@ -36,10 +50,11 @@ class Bdd
 		/**
 		 * cree une instance PDO avec les valeurs en argument
 		 *
+		 * @api
+		 *
 		 * @param string $host l'host a utiliser (localhost par defaut)
 		 * @param string $db_name nom de la base de donnee
 		 * @param string $user utilisateur de la BDD
-		 * @param string $mdp mot de passe de l'utilisateur
 		 * @param string $mdp mot de passe de l'utilisateur
 		 * @param string $production desactive les messages d'erreurs
 		 */
@@ -71,7 +86,7 @@ class Bdd
 		return array('host', 'db_name', 'user', 'mdp', 'production');
 	}
 
-		/** on reconnect au chargement de la page */
+		/** reconnect à la BDD au chargement de la page */
 	public function __wakeup()
 	{
 		$this->_connexion();
@@ -84,10 +99,12 @@ class Bdd
 		/**
 		 * cree une instance PDO
 		 *
-		 * passe le mode de recherche en retour d'OBJET
-		 * passe le mode d'erreur en exception
-		 * utilise l'UTF-8 pour les transactions :
-		 * Il est conseille de faire tout votre site en UTF8
+		 * Active :
+		 * - le mode de recherche en retour d'OBJET
+		 * - le mode d'erreur en exception
+		 * - l'encodage UTF-8 pour les transactions
+		 *
+		 * *Il est conseillé de faire tout votre site en UTF8*
 		 *
 		 * @return void
 		 */
@@ -111,10 +128,10 @@ class Bdd
 	}
 
 		/**
-		 * Gere l'affichage des erreur via exception
+		 * Gère l'affichage des erreurs via exception
 		 *
 		 * @param  Exception $e une exception capturee
-		 * @return void    pas de retour : termine le script
+		 * @return void    pas de retour : termine le script et affiche un message
 		 */
 	private function _showError($e)
 	{
@@ -139,48 +156,67 @@ class Bdd
 		/**
 		 * Passe une requete SQL avec ou sans variable (type SELECT)
 		 *
-		 * Retourne soit **un OBJET** si $mono_line a "Bdd::SINGLE_RES" (ou TRUE),
-		 * soit **un ARRAY d'OBJET** si $mono_line a FALSE ou NULL (par defaut)
+		 * Retourne :
+		 * - soit **un objet** si $mono_line a `Bdd::SINGLE_RES` (ou TRUE),
+		 * - soit **un array d'objet** si $mono_line a FALSE ou NULL (par defaut)
 		 *
 		 * On lui passe en 1er parametre la requete SQL avec le(s) marqueur(s).
-		 * 	un marqueur est une string avec ':' devant
+		 * Un marqueur est une string avec `:` devant
 		 * 		ex : 'SELECT * FROM `maTable` WHERE `tab_id` = :mon_marqueur '
 		 *
-		 * On lui donne en 2nd parametre les arguments dans un tableau (aussi nomme array).
-		 * 	l'array doit etre associatif marqueur => valeur
+		 * On lui donne en 2nd parametre les arguments dans un tableau (aussi nommé array).
+		 * L'array doit etre associatif `marqueur => valeur`
 		 * 		ex : 'array('mon_marqueur' => $maVariable)'
 		 * 		ex : 'array('marqueur1' => $var1, 'marqueur2'=> $var2)'
 		 *
 		 * Si vous savez que vous allez avoir un seul resultat
-		 * (par ex, un COUNT(*), un getUn...() )
-		 * utilisez en 3eme parametre de query() "Bdd::SINGLE_RES" (ou TRUE)
-		 * la methode vous retourneras directement un OBJET
+		 * (par ex, un `COUNT(*)`, un `getUn...()` )
+		 * utilisez en 3eme parametre de query() `Bdd::SINGLE_RES` (ou TRUE)
+		 * la methode vous retourneras directement un **objet**
 		 *
 		 * La requete prend donc ces formes :
-		 * 		$data = $_SESSION['bdd']->query( 'SELECT * FROM `maTable`' );
+		 * 		$sql  = 'SELECT * FROM `maTable`';
+		 * 		$data = $_SESSION['bdd']->query( $sql );
 		 *
-		 * 		$data = $_SESSION['bdd']->query( 'SELECT * FROM `maTable` WHERE `tab_id` = :code' , array('code'=>$codeTable) );
+		 * 		$sql  = 'SELECT * FROM `maTable` WHERE `tab_id` = :code';
+		 * 		$data = $_SESSION['bdd']->query( $sql , array('code'=>$codeTable) );
 		 *
-		 * 		$data = $_SESSION['bdd']->query( 'SELECT COUNT(*) AS alias_nombre FROM `maTable` WHERE `tab_id` = :code' ,
+		 * 		$sql  = 'SELECT COUNT(*) AS alias_nombre FROM `maTable` WHERE `tab_id` = :code';
+		 * 		$data = $_SESSION['bdd']->query( $sql ,
 		 * 			array('code'=>$codeTable) ,
 		 * 			Bdd::SINGLE_RES );
 		 *
-		 * 		$data = $_SESSION['bdd']->query( 'SELECT * FROM `maTable` WHERE `tab_id` = :code AND `tab_pays` = :pays' ,
-		 * 			array('code'=>$codeTable , 'pays'=> $pays) );
+		 * 		$sql  = 'SELECT * FROM `maTable`
+		 * 			WHERE `tab_id` = :code
+		 * 				AND `tab_pays` = :pays
+		 * 			LIMIT :start, :nb_total';
+		 * 		$data = $_SESSION['bdd']->query(
+		 * 			$sql ,
+		 * 			array(
+		 * 				'code'=>$codeTable ,
+		 * 				'pays'=> $pays,
+		 * 				'start'=> intval($start),
+		 * 				'nb_total'=> intval($nb_total),
+		 * 				)
+		 * 			);
 		 *
-		 * On recupere les valeurs en utilisent le nom de la colonne dans la table (ou l'alias via "AS mon_alias")
-		 * - Dans le cas du SINGLE_RES, on a directement un OBJET dans data :
+		 * *Attention, pour les `LIMIT` il faut forcer la variable en integer, via `intval()`*
+		 *
+		 * On recupere les valeurs en utilisent le nom de la colonne dans la table (ou l'alias via `AS mon_alias`)
+		 * - Dans le cas du `Bdd::SINGLE_RES`, on a directement un **objet** dans data :
 		 * 		echo $data->tab_colonne_1;
 		 * 		echo $data->mon_alias;
-		 * - Sinon il faut faire une boucle dans le tableau (array) :
+		 * - Sinon il faut faire une boucle dans le tableau (**array**) :
 		 * 		foreach($data as $unObjet){
 		 * 			echo $unObjet->tab_colonne_2;
 		 * 		}
 		 *
+		 * @api
+		 *
 		 * @param  string  $sql la requete SQL a executer
 		 * @param  array  $arg facultatif : le tableau d'arguments
 		 * @param  boolean $mono_line facultatif : si le resultat doit etre un objet
-		 * @return mixed retourne un objet ou un tableau (array) d'objets
+		 * @return array|object retourne un objet ou un tableau (array) d'objets
 		 */
 	public function query($sql, array $arg = null, $mono_line = false)
 	{
@@ -231,24 +267,36 @@ class Bdd
 		/**
 		 * execute une requete SQL (type DELETE, INSERT INTO, UPDATE)
 		 *
-		 * On lui passe la requete SQL avec les marqueurs.
-		 * 	un marqueur est une string avec ':' devant
+		 * On lui passe en 1er parametre la requete SQL avec le(s) marqueur(s).
+		 * Un marqueur est une string avec `:` devant
 		 * 		ex : 'DELETE FROM table WHERE tab_code = :mon_marqueur '
 		 * 		ex : 'DELETE FROM table WHERE tab_val > :marqueur1 AND tab_type = :marqueur2 '
-		 * on lui donne les arguments dans un tableau.
-		 * 	l'array doit etre associatif marqueur => valeur
+		 *
+		 * On lui donne les arguments dans un tableau.
+		 * L'array doit etre associatif `marqueur => valeur`
 		 * 		ex : 'array('mon_marqueur' => $codeTable)'
-		 * 		ex2 : 'array('marqueur1' => $clause1, 'marqueur2'=>$clause2)'
+		 * 		ex : 'array('marqueur1' => $clause1, 'marqueur2'=>$clause2)'
 		 *
 		 * La requete prend donc ces formes :
-		 * 		$data = $_SESSION['bdd']->exec( 'DELETE FROM table WHERE tab_connexion < 6' );
+		 * 		$sql  = 'DELETE FROM table WHERE tab_connexion < 6';
+		 * 		$data = $_SESSION['bdd']->exec( $sql );
 		 *
-		 * 		$data = $_SESSION['bdd']->exec( 'DELETE FROM table WHERE tab_val = :code' , array('code'=>$codeTable) );
+		 * 		$sql  = 'DELETE FROM table WHERE tab_val = :code';
+		 * 		$data = $_SESSION['bdd']->exec( $sql , array('code'=>$codeTable) );
 		 *
-		 * 		$data = $_SESSION['bdd']->exec( 'INSERT INTO table (`tab_colonne_1`,`tab_colonne_2`) VALUES (:valeur1,:valeur2)' ,
-		 * 			array('valeur1'=>$val1 , 'valeur2'=> $val2) );
+		 * 		$sql  = 'INSERT INTO table (`tab_colonne_1`,`tab_colonne_2`)
+		 * 			VALUES (:valeur1,:valeur2)';
+		 * 		$data = $_SESSION['bdd']->exec(
+		 * 			$sql ,
+		 * 			array(
+		 * 				'valeur1'=>$val1 ,
+		 * 				'valeur2'=> $val2
+		 * 				)
+		 * 			);
 		 *
 		 * retourne le nombre de ligne affectee
+		 *
+		 * @api
 		 *
 		 * @param  string $sql la requete SQL a executer
 		 * @param  array $arg l'array avec les parametres
