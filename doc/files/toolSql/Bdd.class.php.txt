@@ -5,7 +5,7 @@
  * Si vous le renommez, pensez aussi à changer son appelle dans `index.php`
  */
 	/**
-	 * class de gestion PDO simplifiee
+	 * class de gestion PDO simplifiée
 	 *
 	 * - method query() :
 	 * ```php
@@ -17,14 +17,14 @@
 	 *
 	 * - method exec() :
 	 * ```php
-	 * 		int = exec(string $sql[, array $arg])
+	 * 		integer = exec(string $sql[, array $arg])
 	 * ```
 	 *
-	 * execute une commande et retourne le **nombre de lignes** affectees
+	 * execute une commande et retourne le **nombre de lignes** affectées
 	 *
 	 * @global boolean SINGLE_RES
 	 * @author Benoit <benoitelie1@gmail.com>
-	 * @version v.4.0.2
+	 * @version v.4.0.3
 	 * @link https://github.com/blag001/class_easy_pdo depot GitHub
 	 */
 class Bdd
@@ -55,7 +55,6 @@ class Bdd
 		 * cree une instance PDO avec les valeurs en argument
 		 *
 		 * @api
-		 *
 		 * @param string $host l'host a utiliser (localhost par defaut)
 		 * @param string $db_name nom de la base de donnee
 		 * @param string $user utilisateur de la BDD
@@ -90,7 +89,7 @@ class Bdd
 		return array('host', 'db_name', 'user', 'mdp', 'production');
 	}
 
-		/** reconnect à la BDD au chargement de la page */
+		/** reconnection à la BDD au chargement de la page */
 	public function __wakeup()
 	{
 		$this->_connexion();
@@ -101,7 +100,7 @@ class Bdd
 	//////////////
 
 		/**
-		 * cree une instance PDO
+		 * crée une instance PDO
 		 *
 		 * Active :
 		 * - le mode de recherche en retour d'OBJET
@@ -142,7 +141,7 @@ class Bdd
 				// si on est en production, on ne met pas de detail
 			if($this->production)
 				echo 'ERREUR : Merci de contacter le Webmaster.';
-				// sinon les info de debugage
+				// sinon les infos de debugage
 			else{
 				echo '<h1 style="color:#a33">ERROR SQL WITH PDO</h1>'."\n";
 				echo '<strong>'.$e->getMessage().'</strong><br />'."\n";
@@ -211,7 +210,7 @@ class Bdd
 		 *
 		 * *Attention, pour les `LIMIT` il faut forcer la variable en integer, via `intval()`*
 		 *
-		 * On recupere les valeurs en utilisent le nom de la colonne dans la table (ou l'alias via `AS mon_alias`)
+		 * On recupère les valeurs en utilisent le **nom de la colonne** dans la table (ou l'alias via `AS mon_alias`)
 		 * - Dans le cas du `Bdd::SINGLE_RES`, on a directement un **objet** dans data :
 		 * ```php
 		 * 		echo $data->tab_colonne_1;
@@ -322,7 +321,7 @@ class Bdd
 	public function exec($sql, array $arg = null)
 	{
 		try {
-				// on regarde si on a des variable en arguments
+				// on regarde si on a des variables en arguments
 			if(!empty($arg))
 			{
 					// on prepare la requete SQL
@@ -335,7 +334,7 @@ class Bdd
 					else
 						$req->bindParam($key, $value, PDO::PARAM_STR);
 				}
-					// on evite les bug lie a la reference
+					// on evite les bug lie à la reference
 				unset($value);
 
 					// on l'execute
