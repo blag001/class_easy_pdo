@@ -1,4 +1,9 @@
 <?php
+/**
+ * fichier a inclure pour instancier la connexion
+ *
+ * Il créer une instance de la connexion à la BDD dans la SESSION
+ */
 	/**
 	 * instanciation de la connexion BDD dans une variable de session
 	 *
@@ -15,8 +20,7 @@
 	 * @param string $db_name nom de la base de donnee
 	 * @param string $user utilisateur de la BDD
 	 * @param string $mdp mot de passe de l'utilisateur
-	 * @param bool $production (des)active les messages d'erreurs
+	 * @param bool $production (dés)active les messages d'erreurs
 	 */
-
 if (empty($_SESSION['bdd']))
 	$_SESSION['bdd'] = new Bdd(null, null, 'root', '', false);

@@ -70,7 +70,7 @@ $data = $_SESSION['bdd']->query(
 
 *Attention, pour les `LIMIT` il faut forcer la variable en integer, via `intval()`*
 
-On recupere les valeurs en utilisent le nom de la colonne dans la table (ou l'alias via `AS mon_alias`)
+On recupere les valeurs en utilisent le **nom de la colonne** dans la table (ou l'alias via `AS mon_alias`)
 - Dans le cas du `Bdd::SINGLE_RES`, on a directement un OBJET dans data :
 
 ```php
@@ -144,7 +144,7 @@ En gros vous avez trois lignes à ajouter en haut de l'index principal.
 
 ** /!\ Attention à l'ordre de ces lignes, sinon GROS BUG... /!\ **
 
-Autre exemple :
+Autres exemples :
 ---------------
 
 J'ajoute aussi un bout de code de démo (c'est un model tiré du MVC [VLyon](https://github.com/blag001/Vlyon_Reparation_Mobile) ) :
@@ -303,7 +303,7 @@ class OdbBonIntervention
 		return $out;
 	}
 		/**
-		 * recherche les intervention d'un technicien va une valeur
+		 * recherche les interventions d'un technicien via une valeur
 		 * @param  string $valeur   terme recherché
 		 * @param  integer $techCode le code du technicien
 		 * @return array           tableau d'objet des bons d'interventions
