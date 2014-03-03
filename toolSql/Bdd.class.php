@@ -140,10 +140,10 @@ class Bdd
 	{
 				// si on est en production, on ne met pas de detail
 			if($this->production)
-				echo 'ERREUR : Merci de contacter le Webmaster.';
+				echo '<h1>ERREUR : Merci de contacter le Webmaster.</h1>';
 				// sinon les infos de debugage
 			else{
-				echo '<h1 style="color:#a33">ERROR SQL WITH PDO</h1>'."\n";
+				echo '<h1 style="color:#a33">ERROR WITH PDO / SQL</h1>'."\n";
 				echo '<strong>'.$e->getMessage().'</strong><br />'."\n";
 				echo '<h2 style="color:#a33">In this :</h2>'."\n";
 				echo '<pre style="color:#fff; background-color:#333">'.$e->getTraceAsString().'</pre>';
@@ -236,13 +236,23 @@ class Bdd
 				// on regarde si on a des variables en arguments
 			if(!empty($arg))
 			{
+					// erreur si on passe autre chose qu'une string
+				if(!is_string($sql))
+					throw new InvalidArgumentException(__METHOD__.'(): String only: '.ucfirst(gettype($sql)).' found in parametre \'$sql = '.strtoupper(gettype($sql)).'\'' );
 					// on prepare la requete SQL
 				$req = $this->oBdd->prepare($sql);
 					// on lie les elements a la requete
 				foreach ($arg as $key => &$value){
+						// erreur si on passe un objet
+					if(is_object($value))
+						throw new InvalidArgumentException(__METHOD__.'(): String or Integer only: Object found in parametre \'array("'.$key.'"=>OBJECT,...)\'' );
+						// erreur si on passe un array
+					elseif(is_array($value))
+						throw new InvalidArgumentException(__METHOD__.'(): String or Integer only: Array found in parametre \'array("'.$key.'"=>ARRAY,...)\'' );
 						// on regarde si il y a type integer a forcer
-					if (is_int($value))
+					elseif (is_int($value))
 						$req->bindParam($key, $value, PDO::PARAM_INT);
+						// sinon on met en string
 					else
 						$req->bindParam($key, $value, PDO::PARAM_STR);
 				}
@@ -254,6 +264,9 @@ class Bdd
 			}
 			else
 			{
+					// erreur si on passe autre chose qu'une string
+				if(!is_string($sql))
+					throw new InvalidArgumentException(__METHOD__.'(): String only: '.ucfirst(gettype($sql)).' found in parametre \'$sql = '.strtoupper(gettype($sql)).'\'' );
 					// on fait une query simple
 				$req = $this->oBdd->query($sql);
 			}
@@ -270,7 +283,7 @@ class Bdd
 			return $data;
 		}
 			// gestion des erreurs
-		catch (PDOException $e) {
+		catch (Exception $e) {
 			$this->_showError($e);
 		}
 
@@ -324,13 +337,23 @@ class Bdd
 				// on regarde si on a des variables en arguments
 			if(!empty($arg))
 			{
+					// erreur si on passe autre chose qu'une string
+				if(!is_string($sql))
+					throw new InvalidArgumentException(__METHOD__.'(): String only: '.ucfirst(gettype($sql)).' found in parametre \'$sql = '.strtoupper(gettype($sql)).'\'' );
 					// on prepare la requete SQL
 				$req = $this->oBdd->prepare($sql);
 					// on lie les elements a la requete
 				foreach ($arg as $key => &$value){
+						// erreur si on passe un objet
+					if(is_object($value))
+						throw new InvalidArgumentException(__METHOD__.'(): String or Integer only: Object found in parametre \'array("'.$key.'"=>OBJECT,...)\'' );
+						// erreur si on passe un array
+					elseif(is_array($value))
+						throw new InvalidArgumentException(__METHOD__.'(): String or Integer only: Array found in parametre \'array("'.$key.'"=>ARRAY,...)\'' );
 						// on regarde si il y a type integer a forcer
-					if (is_int($value))
+					elseif (is_int($value))
 						$req->bindParam($key, $value, PDO::PARAM_INT);
+						// sinon on met en string
 					else
 						$req->bindParam($key, $value, PDO::PARAM_STR);
 				}
@@ -347,6 +370,9 @@ class Bdd
 				$req->closeCursor();
 			}
 			else{
+					// erreur si on passe autre chose qu'une string
+				if(!is_string($sql))
+					throw new InvalidArgumentException(__METHOD__.'(): String only: '.ucfirst(gettype($sql)).' found in parametre \'$sql = '.strtoupper(gettype($sql)).'\'' );
 					// si pas de variable, on fait une requete simple
 				$out = $this->oBdd->exec($sql);
 			}
@@ -354,7 +380,7 @@ class Bdd
 			return $out;
 		}
 			// gestion des erreurs
-		catch (PDOException $e) {
+		catch (Exception $e) {
 			$this->_showError($e);
 		}
 	}
