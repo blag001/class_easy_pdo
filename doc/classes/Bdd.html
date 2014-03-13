@@ -138,10 +138,10 @@
                                 <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-1055202278"></a>
+                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-2104421072"></a>
                                 <a href="../namespaces/default.html" style="margin-left: 30px; padding-left: 0">\</a>
             </div>
-            <div id="namespace-1055202278" class="accordion-body collapse in">
+            <div id="namespace-2104421072" class="accordion-body collapse in">
                 <div class="accordion-inner">
 
                     
@@ -176,7 +176,17 @@
 <li>method exec() :<pre><code class="language-php">    integer = exec(string $sql[, array $arg])</code></pre>
 </li>
 </ul>
-<p>execute une commande et retourne le <strong>nombre de lignes</strong> affectées</p>
+<p><em>Méthodes avancées (facultatives) pour optimiser certaines requêtes</em></p>
+<ul>
+<li>method prepare() :<pre><code class="language-php">    bool = prepare(string $sql)</code></pre>
+</li>
+</ul>
+<p>prepare une requête pour être exécuté plusieurs fois</p>
+<ul>
+<li>method execute() :<pre><code class="language-php">    array|object|integer = execute([array $arg[, int $retour]])</code></pre>
+</li>
+</ul>
+<p>(re)execute une requete avec les paramètres demandés</p>
 
                     <section id="summary">
                         <h2>Summary</h2>
@@ -198,12 +208,15 @@
                                                                     <a href="../classes/Bdd.html#method___wakeup" class="">__wakeup()</a><br />
                                                                     <a href="../classes/Bdd.html#method_query" class="">query()</a><br />
                                                                     <a href="../classes/Bdd.html#method_exec" class="">exec()</a><br />
+                                                                    <a href="../classes/Bdd.html#method_prepare" class="">prepare()</a><br />
+                                                                    <a href="../classes/Bdd.html#method_execute" class="">execute()</a><br />
                                                             </section>
                             <section class="span4">
                                                                     <em>No public properties found</em>
                                                             </section>
                             <section class="span4">
                                                                     <a href="../classes/Bdd.html#constant_SINGLE_RES" class="">SINGLE_RES</a><br />
+                                                                    <a href="../classes/Bdd.html#constant_NO_RES" class="">NO_RES</a><br />
                                                             </section>
                         </section>
                         <section class="row-fluid protected">
@@ -229,6 +242,7 @@
                                                                     <a href="../classes/Bdd.html#property_mdp" class="">$mdp</a><br />
                                                                     <a href="../classes/Bdd.html#property_production" class="">$production</a><br />
                                                                     <a href="../classes/Bdd.html#property_oBdd" class="">$oBdd</a><br />
+                                                                    <a href="../classes/Bdd.html#property_oReq" class="">$oReq</a><br />
                                                             </section>
                             <section class="span4">
                                 <em>N/A</em>
@@ -264,6 +278,7 @@
                             </th>
                             <td>
                                                                     <p>boolean SINGLE_RES</p>
+                                                                    <p>int NO_RES</p>
                                                             </td>
                         </tr>
                                             <tr>
@@ -279,7 +294,7 @@
                                 version
                             </th>
                             <td>
-                                                                    <p>v.4.0.3</p>
+                                                                    <p>v.5.0.0</p>
                                                             </td>
                         </tr>
                                             <tr>
@@ -308,6 +323,33 @@
                 <h3 class="">SINGLE_RES</h3>
                 <pre class="signature">SINGLE_RES</pre>
                 <p><em>constante à utiliser en cas de resultat unique attendu</em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            todo
+                        </th>
+                        <td>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_NO_RES" name="constant_NO_RES" class="anchor"></a>
+            <article id="constant_NO_RES" class="constant">
+                <h3 class="">NO_RES</h3>
+                <pre class="signature">NO_RES</pre>
+                <p><em>constante à utiliser avec prepare/execute si il n&#039;y a pas de résultat attendu</em></p>
                 
             </article>
         </div>
@@ -499,6 +541,36 @@
                                 <h4>Type</h4>
                 \PDO
                 &mdash; variable avec l&#039;instance PDO                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            todo
+                        </th>
+                        <td>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_oReq" name="property_oReq" class="anchor"></a>
+            <article class="property">
+                <h3 class="private ">$oReq</h3>
+                <pre class="signature">$oReq : object</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                object
+                &mdash; variable qui contient une requête préparée                            </article>
         </div>
         <aside class="span4 detailsbar">
             <h1><i class="icon-arrow-down"></i></h1>
@@ -809,7 +881,7 @@ L'array doit etre associatif <code>marqueur =&gt; valeur</code></p>
                                                     <tr>
                                 <td>array</td>
                                 <td>$arg</td>
-                                <td><p>l'array avec les parametres</p></td>
+                                <td><p>facultatif : l'array avec l(es) parametre(s)</p></td>
                             </tr>
                                             </table>
                 
@@ -817,6 +889,177 @@ L'array doit etre associatif <code>marqueur =&gt; valeur</code></p>
                                     <h4>Returns</h4>
                     int
                                             &mdash; <p>le nombre de ligne affectee</p>
+                                                </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            api
+                        </th>
+                        <td>
+                                                                                            
+                                                    </td>
+                    </tr>
+                                    <tr>
+                        <th>
+                            todo
+                        </th>
+                        <td>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_prepare" name="method_prepare" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">prepare()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">prepare(string <span class="argument">$sql</span>) : bool</pre>
+                <p><em>prepare une requête pour une/des execution(s) ultérieure</em></p>
+                <p><strong>AVANCÉE : Cette methode permet des gains de performance mais vous pouvez utiliser <code>-&gt;query()</code> et <code>-&gt;exec()</code> à la place</strong></p>
+<p><em>Cette methode implique l'utilisation de la methode <code>-&gt;execute()</code>.
+Sans appelle à celle-ci, aucune action ne sera réalisée.</em></p>
+<p>Utilisez cette methode dans les cas où vous auriez à réaliser plusieurs appelles d'une même requête sur la même page,
+mais en devant changer les paramètres à lui passer.</p>
+<p><em>Attention, vous ne pouvez préparer qu'une requête à la fois, un nouveau <code>-&gt;prepare()</code> écraseras le précédent</em></p>
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$sql</td>
+                                <td><p>la requête SQL a préparer</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    bool
+                                            &mdash; <p>retourne un TRUE/FALSE sur la preparation de la requête</p>
+                                                </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            api
+                        </th>
+                        <td>
+                                                                                            
+                                                    </td>
+                    </tr>
+                                    <tr>
+                        <th>
+                            todo
+                        </th>
+                        <td>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_execute" name="method_execute" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">execute()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">execute(array <span class="argument">$arg</span>, int <span class="argument">$retour</span>) : array|object|integer</pre>
+                <p><em>execute une requête préparé à l&#039;aide de `-&gt;prepare()`</em></p>
+                <p><strong>AVANCÉE : Cette methode permet des gains de performance mais vous pouvez utiliser <code>-&gt;query()</code> et <code>-&gt;exec()</code> à la place</strong></p>
+<p><em>Vous devez avant avoir préparé une requête à l'aide de <code>-&gt;prepare()</code>,
+Vous pouvez appeller autemps de fois que vous avez besoin la méthode <code>-&gt;execute()</code>.</em></p>
+<p>Les arguments à passer devrais changer à chaque appelle pour exploiter pleinement cette méthode.</p>
+<p>Retourne :</p>
+<ul>
+<li>soit <strong>un integer</strong> du nombre de ligne affectée si $retour a <code>Bdd::NO_RES</code> (ou -1),</li>
+<li>soit <strong>un objet</strong> si $retour a <code>Bdd::SINGLE_RES</code> (ou TRUE),</li>
+<li>soit <strong>un array d'objet</strong> si $retour a FALSE ou NULL (par defaut)</li>
+</ul>
+<p>On lui passe en 1er parametre les arguments dans un tableau (aussi nommé array).
+L'array doit etre associatif <code>marqueur =&gt; valeur</code></p>
+<pre><code class="language-php">        array('mon_marqueur' =&gt; $maVariable);
+        array('marqueur1' =&gt; $var1, 'marqueur2'=&gt; $var2);</code></pre>
+<p>Si vous savez que vous allez avoir un seul resultat
+(par ex, un <code>COUNT(*)</code>, un <code>getUn...()</code> )
+utilisez en 2nd parametre de execute() <code>Bdd::SINGLE_RES</code> (ou TRUE)
+la methode vous retourneras directement un <strong>objet</strong></p>
+<p>Si vous n'attendais pas de retour
+(par ex, un  <code>DELETE</code>, <code>INSERT INTO</code>, <code>UPDATE</code>) )
+utilisez en 2nd parametre de execute() <code>Bdd::NO_RES</code> (ou -1)
+la methode vous retourneras directement un <strong>integer</strong> du nombre de ligne affectée</p>
+<p>La requete prend donc ces formes :</p>
+<pre><code class="language-php">            // compter un nombre de ligne pour des types définis
+        $sql  = 'SELECT COUNT(*) AS `alias_nombre` FROM `maTable` WHERE `tab_type` = :type';
+        $_SESSION['bdd']-&gt;prepare($sql);
+        $oNbType1 = $_SESSION['bdd']-&gt;execute(
+            array('type'=&gt;$unType) ,
+            Bdd::SINGLE_RES );
+        $oNbType2 = $_SESSION['bdd']-&gt;execute(
+            array('type'=&gt;$unAutreType) ,
+            Bdd::SINGLE_RES );
+
+            // chercher des lignes à plusieurs date
+        $sql  = 'SELECT * FROM `maTable` WHERE `tab_date` BETWEEN :start AND :end LIMIT :nb_total';
+        $_SESSION['bdd']-&gt;prepare($sql);
+        $lignesDate1 = $_SESSION['bdd']-&gt;execute(
+            array(
+                'start'=&gt; $debutDate1,
+                'end'=&gt; $finDate1,
+                'nb_total'=&gt; intval($nb_total),
+                )
+            );
+        $lignesDate2 = $_SESSION['bdd']-&gt;execute(
+            array(
+                'start'=&gt; $debutDate2,
+                'end'=&gt; $finDate2,
+                'nb_total'=&gt; intval($nb_total),
+                )
+            );</code></pre>
+<p><em>Attention, pour les <code>LIMIT</code> il faut forcer la variable en integer, via <code>intval()</code></em></p>
+<p>En cas de retour (autre que <code>Bdd::NO_RES</code> donc),
+on recupère les valeurs en utilisent le <strong>nom de la colonne</strong> dans la table (ou l'alias via <code>AS mon_alias</code>)</p>
+<ul>
+<li>Dans le cas du <code>Bdd::SINGLE_RES</code>, on a directement un <strong>objet</strong> dans data :<pre><code class="language-php">    echo $data-&gt;tab_colonne_1;
+    echo $data-&gt;mon_alias;</code></pre>
+</li>
+<li>Sinon il faut faire une boucle dans le tableau (<strong>array</strong>) :<pre><code class="language-php">    foreach($data as $unObjet){
+        echo $unObjet-&gt;tab_colonne_2;
+    }</code></pre>
+</li>
+</ul>
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>array</td>
+                                <td>$arg</td>
+                                <td><p>facultatif : l(es) argument(s) à passer</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>int</td>
+                                <td>$retour</td>
+                                <td><p>facultatif : demande un resultat en objet, array d'objet, ou pas de résultat</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    array|object|integer
+                                            &mdash; <p>retourne un objet, un tableau (array) d'objets ou le nombre de ligne affectée</p>
                                                 </article>
         </div>
         <aside class="span4 detailsbar">
@@ -969,7 +1212,7 @@ L'array doit etre associatif <code>marqueur =&gt; valeur</code></p>
                 <section class="span10 offset1">
                     <hr />
                     Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor </a> and authored
-                    on March 3rd, 2014 at 16:10.
+                    on March 13th, 2014 at 16:57.
                 </section>
             </section>
         </section>
