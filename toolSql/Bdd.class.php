@@ -530,7 +530,7 @@ class Bdd
 		try {
 				// erreur si on a pas préparé d'objet
 			if(!is_object($this->oReq))
-				throw new InvalidArgumentException(__METHOD__.'(): No prepared statement found ! You should call the ->prepare() method before execute with this :<br />$arg = <br><pre>'.htmlspecialchars(var_dump($sql)).'</pre>' );
+				throw new InvalidArgumentException(__METHOD__.'(): No prepared statement found ! You should call the ->prepare() method before execute with this :<br />$arg = <br><pre>'.var_export($arg, true).'</pre>' );
 
 				// on regarde si on a des variables en arguments
 			if(!empty($arg))
@@ -558,10 +558,10 @@ class Bdd
 			$out = $this->oReq->execute();
 				// si on a une erreur dans le retour
 			if(!$out)
-				throw new RuntimeException(__METHOD__.'(): Error found : executed with this :<br />$arg = <br><pre>'.htmlspecialchars(var_dump($sql)).'</pre>' );
+				throw new RuntimeException(__METHOD__.'(): Error found : executed with this :<br />$arg = <br><pre>'.htmlspecialchars(var_export($arg, true)).'</pre>' );
 
 				// si pas de retour demandé (NO_RES)
-			if($retour == -1)
+			if($retour === -1)
 				return $this->oReq->rowCount(); // nombre de ligne affectee
 				// si on demande une mono-ligne, un simple fetch
 			elseif($retour)
