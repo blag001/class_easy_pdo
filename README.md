@@ -13,6 +13,7 @@ D'abord, la class en question :
 Elle a deux méthodes principale à utiliser :
 - `$_SESSION['bdd']->query(string $requete_sql[, array $argument[, bool $retour_mono_line]])`
 - `$_SESSION['bdd']->exec(string $requete_sql[, array $argument])`
+
 Et deux méthodes avancée :
 - `$_SESSION['bdd']->prepare(string $requete_sql)`
 - `$_SESSION['bdd']->execute([array $argument[, int $format_retour]])`
