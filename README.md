@@ -18,7 +18,7 @@ Et deux méthodes avancée :
 - `$_SESSION['bdd']->prepare(string $requete_sql)`
 - `$_SESSION['bdd']->execute([array $argument[, int $format_retour]])`
 
-**La documentation compette est disponible en ouvrant avec votre navigateur `doc/index.html`**
+**La documentation complète est disponible en ouvrant avec votre navigateur `doc/index.html`**
 
 ### ->query()
 
