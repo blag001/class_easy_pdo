@@ -60,6 +60,8 @@ class Bdd
 	private $oBdd  = null;
 		/** @var object variable qui contient une requête préparée */
 	private $oReq  = null;
+		/** @var string url lors de l'instanciation de la class */
+	private $callSource;
 
 		/** constante à utiliser en cas de resultat unique attendu */
 	const SINGLE_RES = true;
@@ -98,6 +100,9 @@ class Bdd
 		if(!empty($production))
 			$this->production = $production;
 
+			// on sauve la page d'instanciation
+		$this->callSource = $_SERVER['PHP_SELF'];
+
 			// on lance la connexion
 		$this->_connexion();
 	}
@@ -117,6 +122,27 @@ class Bdd
 	public function __wakeup()
 	{
 		$this->_connexion();
+	}
+
+	//////////////////////////////////////
+	// fonction de gestion de la class //
+	//////////////////////////////////////
+
+		/**
+		 * test le besoin de recharger la class pdo
+		 * @param  string $session_index l'index de $_SESSION ou se trouve l'objet PDO (bdd par defaut)
+		 * @return bool                true/false si oui ou non il faut une nouvelle instance
+		 */
+	public static function needInstance($session_index = 'bdd')
+	{
+		if(
+			empty($_SESSION[$session_index])
+			or !is_object($_SESSION[$session_index])
+			or $this->callSource !== $_SERVER['PHP_SELF']
+			)
+			return true;
+		else
+			return false;
 	}
 
 	//////////////
@@ -574,4 +600,5 @@ class Bdd
 			$this->_showError($e);
 		}
 	}
+
 }
