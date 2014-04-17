@@ -138,10 +138,10 @@
                                 <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-2104421072"></a>
+                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-1698836850"></a>
                                 <a href="../namespaces/default.html" style="margin-left: 30px; padding-left: 0">\</a>
             </div>
-            <div id="namespace-2104421072" class="accordion-body collapse in">
+            <div id="namespace-1698836850" class="accordion-body collapse in">
                 <div class="accordion-inner">
 
                     
@@ -206,6 +206,8 @@
                                                                     <a href="../classes/Bdd.html#method___construct" class="">__construct()</a><br />
                                                                     <a href="../classes/Bdd.html#method___sleep" class="">__sleep()</a><br />
                                                                     <a href="../classes/Bdd.html#method___wakeup" class="">__wakeup()</a><br />
+                                                                    <a href="../classes/Bdd.html#method_needInstance" class="">needInstance()</a><br />
+                                                                    <a href="../classes/Bdd.html#method_getCallSource" class="">getCallSource()</a><br />
                                                                     <a href="../classes/Bdd.html#method_query" class="">query()</a><br />
                                                                     <a href="../classes/Bdd.html#method_exec" class="">exec()</a><br />
                                                                     <a href="../classes/Bdd.html#method_prepare" class="">prepare()</a><br />
@@ -243,6 +245,7 @@
                                                                     <a href="../classes/Bdd.html#property_production" class="">$production</a><br />
                                                                     <a href="../classes/Bdd.html#property_oBdd" class="">$oBdd</a><br />
                                                                     <a href="../classes/Bdd.html#property_oReq" class="">$oReq</a><br />
+                                                                    <a href="../classes/Bdd.html#property_callSource" class="">$callSource</a><br />
                                                             </section>
                             <section class="span4">
                                 <em>N/A</em>
@@ -294,7 +297,7 @@
                                 version
                             </th>
                             <td>
-                                                                    <p>v.5.0.0</p>
+                                                                    <p>v.5.1.0</p>
                                                             </td>
                         </tr>
                                             <tr>
@@ -589,6 +592,36 @@
         </aside>
     </div>
 
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_callSource" name="property_callSource" class="anchor"></a>
+            <article class="property">
+                <h3 class="private ">$callSource</h3>
+                <pre class="signature">$callSource : string</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                string
+                &mdash; url lors de l&#039;instanciation de la class                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            todo
+                        </th>
+                        <td>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
                             
                                     <a id="methods" name="methods"></a>
             <div class="row-fluid">
@@ -707,6 +740,84 @@
                 
                 
                             </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            todo
+                        </th>
+                        <td>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_needInstance" name="method_needInstance" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">needInstance()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">needInstance(string <span class="argument">$session_index</span>) : bool</pre>
+                <p><em>test le besoin de recharger la class pdo</em></p>
+                <p>/!\ si vous changer $_SESSION['bdd'] par autre chose, pas exemple $_SESSION['oSql'],
+vous devez passer 'oSql' comme parametre de cette fonction</p>
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$session_index</td>
+                                <td><p>l'index de $_SESSION ou se trouve l'objet PDO ('bdd' par defaut)</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    bool
+                                            &mdash; <p>true/false si oui ou non il faut une nouvelle instance</p>
+                                                </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            todo
+                        </th>
+                        <td>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getCallSource" name="method_getCallSource" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getCallSource()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getCallSource() : string</pre>
+                <p><em>getter de callSource</em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    string
+                                            &mdash; <p>url d'instanciation de l'objet bdd en cours</p>
+                                                </article>
         </div>
         <aside class="span4 detailsbar">
             <h1><i class="icon-arrow-down"></i></h1>
@@ -1212,7 +1323,7 @@ on recupère les valeurs en utilisent le <strong>nom de la colonne</strong> dans
                 <section class="span10 offset1">
                     <hr />
                     Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor </a> and authored
-                    on March 13th, 2014 at 16:57.
+                    on April 17th, 2014 at 23:56.
                 </section>
             </section>
         </section>
