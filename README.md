@@ -1,20 +1,20 @@
 class_easy_pdo
 ==============
 
-*class de gestion de connexion a mysql en PDO*
+*classe de gestion de connexion a mysql en PDO*
 
 **Voir [l'onglet Releases](https://github.com/blag001/class_easy_pdo/releases) pour télécharger la dernière version stable**
 
-D'abord, la class en question :
+D'abord, la classe en question :
 -------------------------------
 
 `/toolSql/Bdd.class.php`
 
-Elle a deux méthodes principale à utiliser :
+Elle a deux méthodes principales à utiliser :
 - `$_SESSION['bdd']->query(string $requete_sql[, array $argument[, bool $retour_mono_line]])`
 - `$_SESSION['bdd']->exec(string $requete_sql[, array $argument])`
 
-Et deux méthodes avancée :
+Et deux méthodes avancées :
 - `$_SESSION['bdd']->prepare(string $requete_sql)`
 - `$_SESSION['bdd']->execute([array $argument[, int $format_retour]])`
 
@@ -22,27 +22,27 @@ Et deux méthodes avancée :
 
 ### ->query()
 
-Passe une requete SQL avec ou sans variable (type SELECT)
+Passe une requête SQL avec ou sans variable (type SELECT)
 
 Retourne
-- soit **un objet** si `$mono_line` a `Bdd::SINGLE_RES` (ou TRUE),
-- soit **un array d'objet** si `$mono_line` a FALSE ou NULL (par defaut)
+- soit **un objet** si `$mono_line` à `Bdd::SINGLE_RES` (ou TRUE),
+- soit **un array d'objet** si `$mono_line` à FALSE ou NULL (par defaut)
 
-On lui passe la **requete SQL** avec le(s) marqueur(s).
+On lui passe la **requête SQL** avec le(s) marqueur(s).
  Un marqueur est une string avec `:` devant.
 
 - ex : `SELECT * FROM table WHERE tab_code = :mon_marqueur`
 
-On lui donne **les arguments** dans un tableau (aussi nomme array).
- L'array doit etre associatif `marqueur => valeur`.
+On lui donne **les arguments** dans un tableau (aussi nommé array).
+ L'array doit être associatif `marqueur => valeur`.
 
 - ex : `array('mon_marqueur' => $codeTable)`
 - ex : `array('marqueur1' => $var1, 'marqueur2'=> $var2)`
 
-Si vous savez que vous allez avoir un seul resultat *(par ex, un `COUNT()`, un `getUn...()` )*,
-utilisez en 3ème parametre de `query()` **la constante** `Bdd::SINGLE_RES` (ou TRUE).
+Si vous savez que vous allez avoir un seul résultat *(par ex, un `COUNT()`, un `getUn...()` )*,
+utilisez en 3ème paramètre de `query()` **la constante** `Bdd::SINGLE_RES` (ou TRUE).
 
-La methode vous retourneras alors directement un **objet**
+La méthode vous retournera alors directement un **objet**
 
 La requête prend donc ces formes :
 ```php
@@ -76,7 +76,7 @@ $data = $_SESSION['bdd']->query(
 
 *Attention, pour les `LIMIT` il faut forcer la variable en integer, via `intval()`*
 
-On recupere les valeurs en utilisent le **nom de la colonne** dans la table (ou l'alias via `AS mon_alias`)
+On recupère les valeurs en utilisant le **nom de la colonne** dans la table (ou l'alias via `AS mon_alias`)
 - Dans le cas du `Bdd::SINGLE_RES`, on a directement un OBJET dans data :
 
 ```php
@@ -96,19 +96,19 @@ foreach($data as $unObjet){
 
 ### ->exec()
 
-Execute une requete SQL (type DELETE, INSERT INTO, UPDATE)
+Exécute une requête SQL (type DELETE, INSERT INTO, UPDATE)
 
-On lui passe la **requete SQL** avec les marqueurs.
+On lui passe la **requête SQL** avec les marqueurs.
 Un marqueur est une string avec `:` devant :
 - ex : `DELETE FROM table WHERE tab_code = :mon_marqueur `
 - ex : `DELETE FROM table WHERE tab_val > :marqueur1 AND tab_type = :marqueur2 `
 
 On lui donne **les arguments** dans un tableau.
- L'array doit etre associatif `marqueur => valeur` :
+ L'array doit être associatif `marqueur => valeur` :
 - ex : `array('mon_marqueur' => $codeTable)`
 - ex : `array('marqueur1' => $clause1, 'marqueur2'=>$clause2)`
 
-La requete prend donc ces formes :
+La requête prend donc ces formes :
 ```php
 <?php
 $sql  = 'DELETE FROM `table` WHERE `tab_connexion` < 6';
@@ -128,7 +128,7 @@ $data = $_SESSION['bdd']->exec(
 	); ?>
 ```
 
-Cette methode retourne le **nombre de ligne** affectée.
+Cette méthode retourne le **nombre de lignes** affectées.
 
 
 Ensuite, la page d'instanciation :
@@ -207,8 +207,8 @@ class OdbBonIntervention
 		return false;
 	}
 		/**
-		 * récupère les bon d'interventions et formate la date en Fr
-		 * @return array tableau d'objet avec le contenue des bons
+		 * récupère les bons d'interventions et formate la date en Fr
+		 * @return array tableau d'objet avec le contenu des bons
 		 */
 	public function getLesBonsInter()
 	{
@@ -225,7 +225,7 @@ class OdbBonIntervention
 		 * récupère une intervention par son code
 		 * @param  integer $code     le code du bon
 		 * @param  integer $techCode le code du technicien
-		 * @return object           un objet qui contien les données du bon
+		 * @return object           un objet qui contient les données du bon
 		 */
 	public function getMonBonInter($code, $techCode)
 	{
@@ -245,7 +245,7 @@ class OdbBonIntervention
 
 		/**
 		 * récupère les interventions d'un technicien via son matricule
-		 * @param  integer $techCode matricule du technincien
+		 * @param  integer $techCode matricule du technicien
 		 * @return array           tableau d'objets des bons d'interventions
 		 */
 	public function getMesInterventions($techCode)
@@ -263,9 +263,9 @@ class OdbBonIntervention
 	}
 
 		/**
-		 * On cree une intervention
+		 * On crée une intervention
 		 * @param  integer $code code du bon à créer
-		 * @return integer       nombre de ligne créé
+		 * @return integer       nombre de lignes créées
 		 */
 	public function creerUnBonInter($code)
 	{

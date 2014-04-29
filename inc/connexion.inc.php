@@ -1,23 +1,23 @@
 <?php
 /**
- * fichier a inclure pour instancier la connexion
+ * fichier à inclure pour instancier la connexion
  *
- * Il créer une instance de la connexion à la BDD dans la SESSION
+ * Il crée une instance de la connexion à la BDD dans la SESSION
  */
 	/**
 	 * instanciation de la connexion BDD dans une variable de session
 	 *
 	 * @todo  /!\ changez ici par vos informations de connexion /!\
 	 *
-	 * Par defaut, si null ou false dans le "Bdd()" :
+	 * Par défaut, si null ou false dans le "Bdd()" :
 	 * 		$host       = 'localhost';
 	 * 		$db_name    = 'test';
 	 * 		$user       = 'root';
 	 * 		$mdp        = '';
 	 * 		$production = false;
 	 *
-	 * @param string $host l'host a utiliser (localhost par defaut)
-	 * @param string $db_name nom de la base de donnee
+	 * @param string $host l'host à utiliser (localhost par défaut)
+	 * @param string $db_name nom de la base de données
 	 * @param string $user utilisateur de la BDD
 	 * @param string $mdp mot de passe de l'utilisateur
 	 * @param bool $production (dés)active les messages d'erreurs
