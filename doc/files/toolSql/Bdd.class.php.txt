@@ -1,24 +1,27 @@
 <?php
 /**
- * ce fichier contient la déclaration de la class
+ * ce fichier contient la déclaration de la classe
  *
- * Si vous le renommez, pensez aussi à changer son appelle dans `index.php`
+ * Si vous le renommez, pensez aussi à changer son appel dans `index.php`
  */
 	/**
-	 * class de gestion PDO simplifiée
+	 * classe de gestion PDO simplifiée
 	 *
 	 * - method query() :
 	 * ```php
 	 * 		array|object = query(string $sql[, array $arg[, bool $mono_line]])
 	 * ```
 	 *
-	 * lance une recherche qui attend un ou plusieurs resultats
+	 * lance une recherche qui attend un ou plusieurs résultats
 	 * (retour en **objet** ou **array d'objet**)
 	 *
 	 * - method exec() :
 	 * ```php
 	 * 		integer = exec(string $sql[, array $arg])
 	 * ```
+	 *
+	 * exécute une requête sans attendre de résultat
+	 * (retourne le nombre de lignes affectées)
 	 *
 	 * *Méthodes avancées (facultatives) pour optimiser certaines requêtes*
 	 *
@@ -27,29 +30,29 @@
 	 * 		bool = prepare(string $sql)
 	 * ```
 	 *
-	 * prepare une requête pour être exécuté plusieurs fois
+	 * prépare une requête pour être exécutée plusieurs fois
 	 *
 	 * - method execute() :
 	 * ```php
 	 * 		array|object|integer = execute([array $arg[, int $retour]])
 	 * ```
 	 *
-	 * (re)execute une requete avec les paramètres demandés
+	 * (re)exécute une requête avec les paramètres demandés
 	 *
 	 * @global boolean SINGLE_RES
 	 * @global int NO_RES
 	 * @author Benoit <benoitelie1@gmail.com>
-	 * @version v.5.1.0
+	 * @version v.5.1.1
 	 * @link https://github.com/blag001/class_easy_pdo depot GitHub
 	 */
 class Bdd
 {
-		// valeur par defaut en cas d'instanciation sans valeur
+		// valeur par défaut en cas d'instanciation sans valeur
 		/** @var string l'host où se trouve la BDD */
 	private $host       = 'localhost';
 		/** @var string nom de la base visée par la connexion */
 	private $db_name    = 'test';
-		/** @var string utilisateur a passer lors de la connexion */
+		/** @var string utilisateur à passer lors de la connexion */
 	private $user       = 'root';
 		/** @var string mot de passe à utiliser avec le nom d'utilisateur */
 	private $mdp        = '';
@@ -60,12 +63,12 @@ class Bdd
 	private $oBdd  = null;
 		/** @var object variable qui contient une requête préparée */
 	private $oReq  = null;
-		/** @var string url lors de l'instanciation de la class */
+		/** @var string url lors de l'instanciation de la classe */
 	private $callSource;
 
-		/** constante à utiliser en cas de resultat unique attendu */
+		/** constante à utiliser en cas de résultat unique attendu */
 	const SINGLE_RES = true;
-		/** constante à utiliser avec prepare/execute si il n'y a pas de résultat attendu */
+		/** constante à utiliser avec prepare/execute s'il n'y a pas de résultat attendu */
 	const NO_RES = -1;
 
 	////////////////////
@@ -73,18 +76,18 @@ class Bdd
 	////////////////////
 
 		/**
-		 * cree une instance PDO avec les valeurs en argument
+		 * crée une instance PDO avec les valeurs en argument
 		 *
 		 * @api
-		 * @param string $host l'host a utiliser (localhost par defaut)
-		 * @param string $db_name nom de la base de donnee
+		 * @param string $host l'host à utiliser (localhost par défaut)
+		 * @param string $db_name nom de la base de données
 		 * @param string $user utilisateur de la BDD
 		 * @param string $mdp mot de passe de l'utilisateur
-		 * @param string $production desactive les messages d'erreurs
+		 * @param string $production désactive les messages d'erreurs
 		 */
 	public function __construct($host=false, $db_name=false, $user=false, $mdp=false, $production=false)
 	{
-			// sauvegarde des variables si on en passe au constructeur
+			// sauvegarde les variables si on les passe au constructeur
 		if(!empty($host))
 			$this->host = $host;
 
@@ -107,34 +110,34 @@ class Bdd
 		$this->_connexion();
 	}
 
-		/** variables a sauver a la fin du chargement de page */
+		/** variables à sauver à la fin du chargement de page */
 	public function __sleep()
 	{
 		if (is_object($this->oReq)) {
-				// on ferme la requete en cours
+				// on ferme la requête en cours
 			$this->oReq->closeCursor();
 		}
 
 		return array('host', 'db_name', 'user', 'mdp', 'production');
 	}
 
-		/** reconnection à la BDD au chargement de la page */
+		/** reconnexion à la BDD au chargement de la page */
 	public function __wakeup()
 	{
 		$this->_connexion();
 	}
 
 	//////////////////////////////////////
-	// fonction de gestion de la class //
+	// fonction de gestion de la classe //
 	//////////////////////////////////////
 
 		/**
-		 * test le besoin de recharger la class pdo
+		 * test le besoin de recharger la classe pdo
 		 *
-		 * /!\ si vous changer $_SESSION['bdd'] par autre chose, pas exemple $_SESSION['oSql'],
-		 * vous devez passer 'oSql' comme parametre de cette fonction
+		 * /!\ si vous changez $_SESSION['bdd'] par autre chose, par exemple $_SESSION['oSql'],
+		 * vous devez passer 'oSql' comme paramètre de cette fonction
 		 *
-		 * @param  string $session_index l'index de $_SESSION ou se trouve l'objet PDO ('bdd' par defaut)
+		 * @param  string $session_index l'index de $_SESSION où se trouve l'objet PDO ('bdd' par defaut)
 		 * @return bool                true/false si oui ou non il faut une nouvelle instance
 		 */
 	public static function needInstance($session_index = 'bdd')
@@ -195,12 +198,12 @@ class Bdd
 		/**
 		 * Gère l'affichage des erreurs via exception
 		 *
-		 * @param  Exception $e une exception capturee
+		 * @param  Exception $e une exception capturée
 		 * @return void    pas de retour : termine le script et affiche un message
 		 */
 	private function _showError($e)
 	{
-				// si on est en production, on ne met pas de detail
+				// si on est en production, on ne met pas de détails
 			if($this->production)
 				echo '<h1>ERREUR : Merci de contacter le Webmaster.</h1>';
 				// sinon les infos de debugage
@@ -211,7 +214,7 @@ class Bdd
 				echo '<pre style="color:#fff; background-color:#333">'.$e->getTraceAsString().'</pre>';
 			}
 
-			die(); // en cas d'erreur, on stop le script
+			die(); // en cas d'erreur, on stoppe le script
 	}
 
 	/////////////
@@ -219,29 +222,29 @@ class Bdd
 	/////////////
 
 		/**
-		 * Passe une requete SQL avec ou sans variable (type SELECT)
+		 * Passe une requête SQL avec ou sans variable (type SELECT)
 		 *
 		 * Retourne :
 		 * - soit **un objet** si $mono_line a `Bdd::SINGLE_RES` (ou TRUE),
 		 * - soit **un array d'objet** si $mono_line a FALSE ou NULL (par defaut)
 		 *
-		 * On lui passe en 1er parametre la requete SQL avec le(s) marqueur(s).
+		 * On lui passe en 1er paramètre la requête SQL avec le(s) marqueur(s).
 		 * Un marqueur est une string avec `:` devant
 		 * 		ex : 'SELECT * FROM `maTable` WHERE `tab_id` = :mon_marqueur '
 		 *
-		 * On lui donne en 2nd parametre les arguments dans un tableau (aussi nommé array).
-		 * L'array doit etre associatif `marqueur => valeur`
+		 * On lui donne en 2nd paramètre les arguments dans un tableau (aussi nommé array).
+		 * L'array doit être associatif `marqueur => valeur`
 		 * ```php
 		 * 		array('mon_marqueur' => $maVariable);
 		 * 		array('marqueur1' => $var1, 'marqueur2'=> $var2);
 		 * ```
 		 *
-		 * Si vous savez que vous allez avoir un seul resultat
+		 * Si vous savez que vous allez avoir un seul résultat
 		 * (par ex, un `COUNT(*)`, un `getUn...()` )
-		 * utilisez en 3eme parametre de query() `Bdd::SINGLE_RES` (ou TRUE)
-		 * la methode vous retourneras directement un **objet**
+		 * utilisez en 3eme paramètre de query() `Bdd::SINGLE_RES` (ou TRUE)
+		 * la méthode vous retournera directement un **objet**
 		 *
-		 * La requete prend donc ces formes :
+		 * La requête prend donc ces formes :
 		 * ```php
 		 * 		$sql  = 'SELECT * FROM `maTable`';
 		 * 		$data = $_SESSION['bdd']->query( $sql );
@@ -272,7 +275,7 @@ class Bdd
 		 *
 		 * *Attention, pour les `LIMIT` il faut forcer la variable en integer, via `intval()`*
 		 *
-		 * On recupère les valeurs en utilisent le **nom de la colonne** dans la table (ou l'alias via `AS mon_alias`)
+		 * On recupère les valeurs en utilisant le **nom de la colonne** dans la table (ou l'alias via `AS mon_alias`)
 		 * - Dans le cas du `Bdd::SINGLE_RES`, on a directement un **objet** dans data :
 		 * ```php
 		 * 		echo $data->tab_colonne_1;
@@ -287,9 +290,9 @@ class Bdd
 		 *
 		 * @api
 		 *
-		 * @param  string  $sql la requete SQL a executer
+		 * @param  string  $sql la requête SQL à executer
 		 * @param  array  $arg facultatif : le tableau d'arguments
-		 * @param  boolean $mono_line facultatif : si le resultat doit etre un objet
+		 * @param  boolean $mono_line facultatif : si le résultat doit être un objet
 		 * @return array|object retourne un objet ou un tableau (array) d'objets
 		 */
 	public function query($sql, array $arg = null, $mono_line = false)
@@ -302,9 +305,9 @@ class Bdd
 				// on regarde si on a des variables en arguments
 			if(!empty($arg))
 			{
-					// on prepare la requete SQL
+					// on prépare la requête SQL
 				$req = $this->oBdd->prepare($sql);
-					// on lie les elements a la requete
+					// on lie les éléments à la requête
 				foreach ($arg as $key => &$value){
 						// erreur si on passe un objet
 					if(is_object($value))
@@ -312,17 +315,17 @@ class Bdd
 						// erreur si on passe un array
 					elseif(is_array($value))
 						throw new InvalidArgumentException(__METHOD__.'(): String or Integer only: Array found in parametre \'array("'.$key.'"=>ARRAY,...)\'' );
-						// on regarde si il y a type integer a forcer
+						// on regarde s'il y a type integer à forcer
 					elseif (is_int($value))
 						$req->bindParam($key, $value, PDO::PARAM_INT);
 						// sinon on met en string
 					else
 						$req->bindParam($key, $value, PDO::PARAM_STR);
 				}
-					// on evite les bug lie a la reference
+					// on évite les bug liés à la référence
 				unset($value);
 
-					// on l'execute avec les variables
+					// on l'exécute avec les variables
 				$req->execute();
 			}
 			else
@@ -334,10 +337,10 @@ class Bdd
 				// si on demande une mono-ligne, un simple fetch
 			if($mono_line)
 				$data = $req->fetch();
-			else // sinon on cherche tous les OBJET dans un ARRAY
+			else // sinon on cherche tous les OBJETS dans un ARRAY
 				$data = $req->fetchAll();
 
-				// on ferme la requete en cours
+				// on ferme la requête en cours
 			$req->closeCursor();
 
 			return $data;
@@ -350,21 +353,21 @@ class Bdd
 	}
 
 		/**
-		 * execute une requete SQL (type DELETE, INSERT INTO, UPDATE)
+		 * exécute une requête SQL (type DELETE, INSERT INTO, UPDATE)
 		 *
-		 * On lui passe en 1er parametre la requete SQL avec le(s) marqueur(s).
+		 * On lui passe en 1er paramètre la requête SQL avec le(s) marqueur(s).
 		 * Un marqueur est une string avec `:` devant
 		 * 		ex : 'DELETE FROM `table` WHERE `tab_code` = :mon_marqueur '
 		 * 		ex : 'DELETE FROM `table` WHERE `tab_val` > :marqueur1 AND `tab_type` = :marqueur2 '
 		 *
 		 * On lui donne les arguments dans un tableau.
-		 * L'array doit etre associatif `marqueur => valeur`
+		 * L'array doit être associatif `marqueur => valeur`
 		 * ```php
 		 * 		array('mon_marqueur' => $codeTable);
 		 * 		array('marqueur1' => $clause1, 'marqueur2'=>$clause2);
 		 * ```
 		 *
-		 * La requete prend donc ces formes :
+		 * La requête prend donc ces formes :
 		 * ```php
 		 * 		$sql  = 'DELETE FROM `table` WHERE `tab_connexion` < 6';
 		 * 		$data = $_SESSION['bdd']->exec( $sql );
@@ -383,13 +386,13 @@ class Bdd
 		 * 			);
 		 * ```
 		 *
-		 * retourne le nombre de ligne affectee
+		 * retourne le nombre de lignes affectées
 		 *
 		 * @api
 		 *
-		 * @param  string $sql la requete SQL a executer
-		 * @param  array $arg facultatif : l'array avec l(es) parametre(s)
-		 * @return int le nombre de ligne affectee
+		 * @param  string $sql la requête SQL à executer
+		 * @param  array $arg facultatif : l'array avec l(es) paramètre(s)
+		 * @return int le nombre de lignes affectées
 		 */
 	public function exec($sql, array $arg = null)
 	{
@@ -401,9 +404,9 @@ class Bdd
 				// on regarde si on a des variables en arguments
 			if(!empty($arg))
 			{
-					// on prepare la requete SQL
+					// on prépare la requête SQL
 				$req = $this->oBdd->prepare($sql);
-					// on lie les elements a la requete
+					// on lie les éléments à la requête
 				foreach ($arg as $key => &$value){
 						// erreur si on passe un objet
 					if(is_object($value))
@@ -411,27 +414,27 @@ class Bdd
 						// erreur si on passe un array
 					elseif(is_array($value))
 						throw new InvalidArgumentException(__METHOD__.'(): String or Integer only: Array found in parametre \'array("'.$key.'"=>ARRAY,...)\'' );
-						// on regarde si il y a type integer a forcer
+						// on regarde s'il y a un type integer à forcer
 					elseif (is_int($value))
 						$req->bindParam($key, $value, PDO::PARAM_INT);
 						// sinon on met en string
 					else
 						$req->bindParam($key, $value, PDO::PARAM_STR);
 				}
-					// on evite les bug lie à la reference
+					// on évite les bug liés à la référence
 				unset($value);
 
-					// on l'execute
+					// on l'exécute
 				if($out = $req->execute()){
-						// si pas de probleme, on compte le nombre de ligne affectee
+						// si pas de problème, on compte le nombre de lignes affectées
 					$out = $req->rowCount();
 				}
 
-					// on ferme la requete en cours
+					// on ferme la requête en cours
 				$req->closeCursor();
 			}
 			else{
-					// si pas de variable, on fait une requete simple
+					// si pas de variable, on fait une requête simple
 				$out = $this->oBdd->exec($sql);
 			}
 
@@ -444,22 +447,22 @@ class Bdd
 	}
 
 		/**
-		 * prepare une requête pour une/des execution(s) ultérieure
+		 * prépare une requête pour une/des exécution(s) ultérieure(s)
 		 *
-		 * **AVANCÉE : Cette methode permet des gains de performance mais vous pouvez utiliser `->query()` et `->exec()` à la place**
+		 * **AVANCÉE : Cette méthode permet des gains de performance mais vous pouvez utiliser `->query()` et `->exec()` à la place**
 		 *
-		 * *Cette methode implique l'utilisation de la methode `->execute()`.
-		 * Sans appelle à celle-ci, aucune action ne sera réalisée.*
+		 * *Cette méthode implique l'utilisation de la méthode `->execute()`.
+		 * Sans appel à celle-ci, aucune action ne sera réalisée.*
 		 *
-		 * Utilisez cette methode dans les cas où vous auriez à réaliser plusieurs appelles d'une même requête sur la même page,
+		 * Utilisez cette méthode dans les cas où vous auriez à réaliser plusieurs appels d'une même requête sur la même page,
 		 * mais en devant changer les paramètres à lui passer.
 		 *
-		 * *Attention, vous ne pouvez préparer qu'une requête à la fois, un nouveau `->prepare()` écraseras le précédent*
+		 * *Attention, vous ne pouvez préparer qu'une requête à la fois, un nouveau `->prepare()` écrasera le précédent*
 		 *
 		 * @api
 		 *
 		 * @param  string $sql la requête SQL a préparer
-		 * @return bool      retourne un TRUE/FALSE sur la preparation de la requête
+		 * @return bool      retourne un TRUE/FALSE sur la préparation de la requête
 		 */
 	public function prepare($sql=null)
 	{
@@ -468,7 +471,7 @@ class Bdd
 			if(!is_string($sql))
 				throw new InvalidArgumentException(__METHOD__.'(): String only: '.ucfirst(gettype($sql)).' found in parametre \'$sql = '.strtoupper(gettype($sql)).'\'' );
 
-				// on prepare la requete SQL
+				// on prépare la requête SQL
 			$this->oReq = $this->oBdd->prepare($sql);
 
 			return !empty($this->oReq);
@@ -479,40 +482,40 @@ class Bdd
 		}
 	}
 		/**
-		 * execute une requête préparé à l'aide de `->prepare()`
+		 * exécute une requête préparée à l'aide de `->prepare()`
 		 *
-		 * **AVANCÉE : Cette methode permet des gains de performance mais vous pouvez utiliser `->query()` et `->exec()` à la place**
+		 * **AVANCÉE : Cette méthode permet des gains de performances mais vous pouvez utiliser `->query()` et `->exec()` à la place**
 		 *
 		 * *Vous devez avant avoir préparé une requête à l'aide de `->prepare()`,
-		 * Vous pouvez appeller autemps de fois que vous avez besoin la méthode `->execute()`.*
+		 * Vous pouvez appeler autant de fois que vous avez besoin la méthode `->execute()`.*
 		 *
-		 * Les arguments à passer devrais changer à chaque appelle pour exploiter pleinement cette méthode.
+		 * Les arguments à passer devraient changer à chaque appel pour exploiter pleinement cette méthode.
 		 *
 		 * Retourne :
-		 * - soit **un integer** du nombre de ligne affectée si $retour a `Bdd::NO_RES` (ou -1),
-		 * - soit **un objet** si $retour a `Bdd::SINGLE_RES` (ou TRUE),
+		 * - soit **un integer** du nombre de lignes affectéess si $retour à `Bdd::NO_RES` (ou -1),
+		 * - soit **un objet** si $retour à `Bdd::SINGLE_RES` (ou TRUE),
 		 * - soit **un array d'objet** si $retour a FALSE ou NULL (par defaut)
 		 *
-		 * On lui passe en 1er parametre les arguments dans un tableau (aussi nommé array).
-		 * L'array doit etre associatif `marqueur => valeur`
+		 * On lui passe en 1er paramètre les arguments dans un tableau (aussi nommé array).
+		 * L'array doit être associatif `marqueur => valeur`
 		 * ```php
 		 * 		array('mon_marqueur' => $maVariable);
 		 * 		array('marqueur1' => $var1, 'marqueur2'=> $var2);
 		 * ```
 		 *
-		 * Si vous savez que vous allez avoir un seul resultat
+		 * Si vous savez que vous allez avoir un seul résultat
 		 * (par ex, un `COUNT(*)`, un `getUn...()` )
-		 * utilisez en 2nd parametre de execute() `Bdd::SINGLE_RES` (ou TRUE)
-		 * la methode vous retourneras directement un **objet**
+		 * utilisez en 2nd paramètre de execute() `Bdd::SINGLE_RES` (ou TRUE)
+		 * la methode vous retournera directement un **objet**
 		 *
-		 * Si vous n'attendais pas de retour
+		 * Si vous n'attendez pas de retour
 		 * (par ex, un  `DELETE`, `INSERT INTO`, `UPDATE`) )
-		 * utilisez en 2nd parametre de execute() `Bdd::NO_RES` (ou -1)
-		 * la methode vous retourneras directement un **integer** du nombre de ligne affectée
+		 * utilisez en 2nd paramètre de execute() `Bdd::NO_RES` (ou -1)
+		 * la méthode vous retournera directement un **integer** du nombre de lignes affectées
 		 *
-		 * La requete prend donc ces formes :
+		 * La requête prend donc ces formes :
 		 * ```php
-		 * 			// compter un nombre de ligne pour des types définis
+		 * 			// compter un nombre de lignes pour des types définis
 		 * 		$sql  = 'SELECT COUNT(*) AS `alias_nombre` FROM `maTable` WHERE `tab_type` = :type';
 		 * 		$_SESSION['bdd']->prepare($sql);
 		 * 		$oNbType1 = $_SESSION['bdd']->execute(
@@ -522,7 +525,7 @@ class Bdd
 		 * 			array('type'=>$unAutreType) ,
 		 * 			Bdd::SINGLE_RES );
 		 *
-		 * 			// chercher des lignes à plusieurs date
+		 * 			// chercher des lignes à plusieurs dates
 		 * 		$sql  = 'SELECT * FROM `maTable` WHERE `tab_date` BETWEEN :start AND :end LIMIT :nb_total';
 		 * 		$_SESSION['bdd']->prepare($sql);
 		 * 		$lignesDate1 = $_SESSION['bdd']->execute(
@@ -544,7 +547,7 @@ class Bdd
 		 * *Attention, pour les `LIMIT` il faut forcer la variable en integer, via `intval()`*
 		 *
 		 * En cas de retour (autre que `Bdd::NO_RES` donc),
-		 * on recupère les valeurs en utilisent le **nom de la colonne** dans la table (ou l'alias via `AS mon_alias`)
+		 * on récupère les valeurs en utilisant le **nom de la colonne** dans la table (ou l'alias via `AS mon_alias`)
 		 * - Dans le cas du `Bdd::SINGLE_RES`, on a directement un **objet** dans data :
 		 * ```php
 		 * 		echo $data->tab_colonne_1;
@@ -561,19 +564,19 @@ class Bdd
 		 *
 		 * @param  array  $arg       facultatif : l(es) argument(s) à passer
 		 * @param  int    $retour    facultatif : demande un resultat en objet, array d'objet, ou pas de résultat
-		 * @return array|object|integer             retourne un objet, un tableau (array) d'objets ou le nombre de ligne affectée
+		 * @return array|object|integer             retourne un objet, un tableau (array) d'objets ou le nombre de lignes affectées
 		 */
 	public function execute(array $arg = null, $retour = false)
 	{
 		try {
-				// erreur si on a pas préparé d'objet
+				// erreur si on n'a pas préparé d'objet
 			if(!is_object($this->oReq))
 				throw new InvalidArgumentException(__METHOD__.'(): No prepared statement found ! You should call the ->prepare() method before execute with this :<br />$arg = <br><pre>'.var_export($arg, true).'</pre>' );
 
 				// on regarde si on a des variables en arguments
 			if(!empty($arg))
 			{
-					// on lie les elements a la requete
+					// on lie les éléments à la requête
 				foreach ($arg as $key => &$value){
 						// erreur si on passe un objet
 					if(is_object($value))
@@ -581,18 +584,18 @@ class Bdd
 						// erreur si on passe un array
 					elseif(is_array($value))
 						throw new InvalidArgumentException(__METHOD__.'(): String or Integer only: Array found in parametre \'array("'.$key.'"=>ARRAY,...)\'' );
-						// on regarde si il y a type integer a forcer
+						// on regarde s'il y a type integer à forcer
 					elseif(is_int($value))
 						$this->oReq->bindParam($key, $value, PDO::PARAM_INT);
 						// sinon on met en string
 					else
 						$this->oReq->bindParam($key, $value, PDO::PARAM_STR);
 				}
-					// on evite les bug lie a la reference
+					// on évite les bug liés à la référence
 				unset($value);
 			}
 
-				// on execute la requete
+				// on exécute la requête
 			$out = $this->oReq->execute();
 				// si on a une erreur dans le retour
 			if(!$out)
@@ -604,7 +607,7 @@ class Bdd
 				// si on demande une mono-ligne, un simple fetch
 			elseif($retour)
 				return $this->oReq->fetch();
-			else // sinon on cherche tous les OBJET dans un ARRAY
+			else // sinon on cherche tous les OBJETS dans un ARRAY
 				return $this->oReq->fetchAll();
 		}
 			// gestion des erreurs
