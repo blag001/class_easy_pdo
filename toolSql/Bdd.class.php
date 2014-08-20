@@ -447,6 +447,23 @@ class Bdd
 	}
 
 		/**
+		 * retourne l'identifiant de la dernière insertion
+		 *
+		 * **Attention, cette fonction sur base sur PDO::lastInsertId() et peut ne pas toujours retourner la bonne valeur**
+		 * merci de lire la documentation liée à PDO::lastInsertId() pour plus d'information
+		 *
+		 * Utilisez cette méthode pour optenir le dernier ID rentré en bdd lors de l'instance en cours
+		 *
+		 * @api
+		 *
+		 * @return string le dernier Id d'insertion ou '0'
+		 */
+	public function lastInsertId()
+	{
+		return $this->oBdd->lastInsertId();
+	}
+
+		/**
 		 * prépare une requête pour une/des exécution(s) ultérieure(s)
 		 *
 		 * **AVANCÉE : Cette méthode permet des gains de performance mais vous pouvez utiliser `->query()` et `->exec()` à la place**
