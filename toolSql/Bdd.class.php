@@ -58,6 +58,8 @@ class Bdd
 	private $mdp        = '';
 		/** @var boolean mode d'affichage des erreurs */
 	private $production = false;
+		/** @var string mail a utiliser en cas de bug en mode production=true */
+	private $mail ;
 
 		/** @var PDO variable avec l'instance PDO */
 	private $oBdd  = null;
@@ -84,8 +86,9 @@ class Bdd
 		 * @param string $user utilisateur de la BDD
 		 * @param string $mdp mot de passe de l'utilisateur
 		 * @param string $production désactive les messages d'erreurs
+		 * @param string $mail mail a utiliser en cas de bug en mode production=true
 		 */
-	public function __construct($host=false, $db_name=false, $user=false, $mdp=false, $production=false)
+	public function __construct($host=false, $db_name=false, $user=false, $mdp=false, $production=false, $mail = false)
 	{
 			// sauvegarde les variables si on les passe au constructeur
 		if(!empty($host))
@@ -103,6 +106,11 @@ class Bdd
 		if(!empty($production))
 			$this->production = $production;
 
+		if(!empty($mail))
+			$this->mail = $mail;
+		else
+			$this->mail = 'webmaster@' . $_SERVER['SERVER_NAME'];
+
 			// on sauve la page d'instanciation
 		$this->callSource = $_SERVER['PHP_SELF'];
 
@@ -118,7 +126,7 @@ class Bdd
 			$this->oReq->closeCursor();
 		}
 
-		return array('host', 'db_name', 'user', 'mdp', 'production');
+		return array('host', 'db_name', 'user', 'mdp', 'production', 'mail');
 	}
 
 		/** reconnexion à la BDD au chargement de la page */
@@ -203,9 +211,29 @@ class Bdd
 		 */
 	private function _showError($e)
 	{
-				// si on est en production, on ne met pas de détails
-			if($this->production)
-				echo '<h1>ERREUR : Merci de contacter le Webmaster.</h1>';
+				// si on est en production, on ne met pas de détails mais on mail le webmaster
+			if($this->production){
+				$title = '[ERROR SQL/PDO]@'.$_SERVER['SERVER_NAME'];
+				// message
+				$message = '<html><head><title>'.$title.'</title></head><body>
+					<h1 style="color:#a33">ERROR WITH PDO / SQL</h1>
+					<strong>'.$e->getMessage().'</strong><br />
+					<h2 style="color:#a33">In this :</h2>
+					<pre style="color:#fff; background-color:#333">'.$e->getTraceAsString().'</pre></body></html>';
+
+				// mail HTML avec header
+				$headers  = 'MIME-Version: 1.0' . "\r\n";
+				$headers .= 'Content-type: text/html; charset=utf-8' . "\r\n";
+				$headers .= 'To: ' .$this->mail. "\r\n";
+				$headers .= 'From: webmaster@' . $_SERVER['SERVER_NAME']. "\r\n";
+				$headers .= 'Reply-To: ' .$this->mail. "\r\n";
+				$headers .= 'X-Mailer: PHP/'.phpversion()."\r\n";
+
+				// Envoi
+				mail($this->mail, $title, $message, $headers);
+
+				echo '<h1>ERREUR : Le Webmaster a &eacute;t&eacute; pr&eacute;venu de cette erreur.</h1>';
+			}
 				// sinon les infos de debugage
 			else{
 				echo '<h1 style="color:#a33">ERROR WITH PDO / SQL</h1>'."\n";
@@ -449,7 +477,7 @@ class Bdd
 		/**
 		 * retourne l'identifiant de la dernière insertion
 		 *
-		 * **Attention, cette fonction sur base sur PDO::lastInsertId() et peut ne pas toujours retourner la bonne valeur**
+		 * **Attention, cette fonction se base sur PDO::lastInsertId() et peut ne pas toujours retourner la bonne valeur**
 		 * merci de lire la documentation liée à PDO::lastInsertId() pour plus d'information
 		 *
 		 * Utilisez cette méthode pour optenir le dernier ID rentré en bdd lors de l'instance en cours
