@@ -14,6 +14,9 @@ Elle a deux méthodes principales à utiliser :
 - `$_SESSION['bdd']->query(string $requete_sql[, array $argument[, bool $retour_mono_line]])`
 - `$_SESSION['bdd']->exec(string $requete_sql[, array $argument])`
 
+Une méthode annexe :
+- `$_SESSION['bdd']->lastInsertId()`
+
 Et deux méthodes avancées :
 - `$_SESSION['bdd']->prepare(string $requete_sql)`
 - `$_SESSION['bdd']->execute([array $argument[, int $format_retour]])`
@@ -137,7 +140,7 @@ Ensuite, la page d'instanciation :
 `/inc/connexion.inc.php`
 
 Juste les valeurs dans `new Bdd()` à changer suivant votre configuration :
-- passez `null,null,null,null,false` si vous voulez utiliser les valeurs par défaut,
+- passez `null,null,null,null,false, null, null` si vous voulez utiliser les valeurs par défaut,
 - Sinon remplacez comme indiqué dans les commentaires
 - une fois en production utilisez `TRUE` en 5eme paramètre
 

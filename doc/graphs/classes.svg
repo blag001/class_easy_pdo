@@ -18,12 +18,12 @@
 <path fill="none" stroke="gray" d="M20,-82C14,-82 8,-76 8,-70"/>
 <polyline fill="none" stroke="gray" points="8,-70 8,-20 "/>
 <path fill="none" stroke="gray" d="M8,-20C8,-14 14,-8 20,-8"/>
-<text text-anchor="middle" x="43" y="-68.1" font-family="Times Roman,serif" font-size="11.00" fill="gray">\</text>
+<text text-anchor="middle" x="43" y="-68.1" font-family="Times Roman,serif" font-size="11.00" fill="gray">Global</text>
 </g>
 <!-- \\Bdd -->
 <g id="node2" class="node"><title>\\Bdd</title>
 <polygon fill="none" stroke="black" points="70,-52 16,-52 16,-16 70,-16 70,-52"/>
-<text text-anchor="middle" x="43" y="-31.1" font-family="Times Roman,serif" font-size="11.00">Bdd</text>
+<text text-anchor="middle" x="43" y="-31.1" font-family="Courier,monospace" font-size="11.00">Bdd</text>
 </g>
 </g>
 </svg>

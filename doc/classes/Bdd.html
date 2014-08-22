@@ -7,17 +7,17 @@
     <meta name="author" content=""/>
     <meta name="description" content=""/>
 
-    <link href="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.no-icons.min.css" rel="stylesheet">
-    <link href="https://netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/bootstrap-combined.no-icons.min.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
     <link href="../css/prism.css" rel="stylesheet" media="all"/>
     <link href="../css/template.css" rel="stylesheet" media="all"/>
     
     <!--[if lt IE 9]>
-    <script src="https://html5shim.googlecode.com/svn/trunk/html5.js" type="text/javascript"></script>
+    <script src="../js/html5.js"></script>
     <![endif]-->
-    <script src="https://code.jquery.com/jquery-1.10.2.min.js" type="text/javascript"></script>
-    <script src="https://code.jquery.com/ui/1.10.3/jquery-ui.min.js" type="text/javascript"></script>
-    <script src="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+    <script src="../js/jquery-1.11.0.min.js"></script>
+    <script src="../js/ui/1.10.4/jquery-ui.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
     <script src="../js/jquery.smooth-scroll.js"></script>
     <script src="../js/prism.min.js"></script>
     <!-- TODO: Add http://jscrollpane.kelvinluck.com/ to style the scrollbars for browsers not using webkit-->
@@ -87,14 +87,7 @@
 
             <div class="nav-collapse">
                 <ul class="nav pull-right">
-                    <li class="dropdown">
-                        <a href="../index.html" class="dropdown-toggle" data-toggle="dropdown">
-                            API Documentation <b class="caret"></b>
-                        </a>
-                        <ul class="dropdown-menu">
-                                                    </ul>
-                    </li>
-                    <li class="dropdown" id="charts-menu">
+                                        <li class="dropdown" id="charts-menu">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                             Charts <b class="caret"></b>
                         </a>
@@ -121,6 +114,11 @@
                                                                                                                                                                                                                                                                                                                                                 <i class="icon-list-alt"></i>&#160;Markers <span class="label label-info pull-right">0</span>
                                 </a>
                             </li>
+                            <li>
+                                <a href="../reports/deprecated.html">
+                                                                                                            <i class="icon-list-alt"></i>&#160;Deprecated <span class="label label-info pull-right">0</span>
+                                </a>
+                            </li>
                         </ul>
                     </li>
                 </ul>
@@ -138,10 +136,10 @@
                                 <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-1479222658"></a>
+                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-293081744"></a>
                                 <a href="../namespaces/default.html" style="margin-left: 30px; padding-left: 0">\</a>
             </div>
-            <div id="namespace-1479222658" class="accordion-body collapse in">
+            <div id="namespace-293081744" class="accordion-body collapse in">
                 <div class="accordion-inner">
 
                     
@@ -167,29 +165,30 @@
                     <h1><small>\</small>Bdd</h1>
                     <p><em>classe de gestion PDO simplifiée</em></p>
                     <ul>
-<li>method query() :<pre><code class="language-php">    array|object = query(string $sql[, array $arg[, bool $mono_line]])</code></pre>
-</li>
+<li>method query() :
+<pre><code class="language-php">    array|object = query(string $sql[, array $arg[, bool $mono_line]])</code></pre></li>
 </ul>
 <p>lance une recherche qui attend un ou plusieurs résultats
 (retour en <strong>objet</strong> ou <strong>array d'objet</strong>)</p>
 <ul>
-<li>method exec() :<pre><code class="language-php">    integer = exec(string $sql[, array $arg])</code></pre>
-</li>
+<li>method exec() :
+<pre><code class="language-php">    integer = exec(string $sql[, array $arg])</code></pre></li>
 </ul>
 <p>exécute une requête sans attendre de résultat
 (retourne le nombre de lignes affectées)</p>
 <p><em>Méthodes avancées (facultatives) pour optimiser certaines requêtes</em></p>
 <ul>
-<li>method prepare() :<pre><code class="language-php">    bool = prepare(string $sql)</code></pre>
-</li>
+<li>method prepare() :
+<pre><code class="language-php">    bool = prepare(string $sql)</code></pre></li>
 </ul>
 <p>prépare une requête pour être exécutée plusieurs fois</p>
 <ul>
-<li>method execute() :<pre><code class="language-php">    array|object|integer = execute([array $arg[, int $retour]])</code></pre>
-</li>
+<li>method execute() :
+<pre><code class="language-php">    array|object|integer = execute([array $arg[, int $retour]])</code></pre></li>
 </ul>
 <p>(re)exécute une requête avec les paramètres demandés</p>
-
+                    
+                                        
                     <section id="summary">
                         <h2>Summary</h2>
                         <section class="row-fluid heading">
@@ -212,6 +211,7 @@
                                                                     <a href="../classes/Bdd.html#method_getCallSource" class="">getCallSource()</a><br />
                                                                     <a href="../classes/Bdd.html#method_query" class="">query()</a><br />
                                                                     <a href="../classes/Bdd.html#method_exec" class="">exec()</a><br />
+                                                                    <a href="../classes/Bdd.html#method_lastInsertId" class="">lastInsertId()</a><br />
                                                                     <a href="../classes/Bdd.html#method_prepare" class="">prepare()</a><br />
                                                                     <a href="../classes/Bdd.html#method_execute" class="">execute()</a><br />
                                                             </section>
@@ -245,6 +245,8 @@
                                                                     <a href="../classes/Bdd.html#property_user" class="">$user</a><br />
                                                                     <a href="../classes/Bdd.html#property_mdp" class="">$mdp</a><br />
                                                                     <a href="../classes/Bdd.html#property_production" class="">$production</a><br />
+                                                                    <a href="../classes/Bdd.html#property_mail" class="">$mail</a><br />
+                                                                    <a href="../classes/Bdd.html#property_freeErrorCode" class="">$freeErrorCode</a><br />
                                                                     <a href="../classes/Bdd.html#property_oBdd" class="">$oBdd</a><br />
                                                                     <a href="../classes/Bdd.html#property_oReq" class="">$oReq</a><br />
                                                                     <a href="../classes/Bdd.html#property_callSource" class="">$callSource</a><br />
@@ -260,9 +262,9 @@
                     
                     <dl>
                         <dt>File</dt>
-                            <dd><a href="../files/toolSql.Bdd.class.php.html"><div class="path-wrapper">toolSql/Bdd.class.php</div></a></dd>
+                            <dd><a href="../files/toolSql.Bdd.class.html"><div class="path-wrapper">toolSql/Bdd.class.php</div></a></dd>
                                                 <dt>Package</dt>
-                            <dd><div class="namespace-wrapper">\Default</div></dd>
+                            <dd><div class="namespace-wrapper">Default</div></dd>
                                                 <dt>Class hierarchy</dt>
                             <dd class="hierarchy">
                                                                                                                                                                     <div class="namespace-wrapper">\Bdd</div>
@@ -291,7 +293,7 @@
                                 author
                             </th>
                             <td>
-                                                                    <p>Benoit <benoitelie1@gmail.com></p>
+                                                                    <p>Benoit <a href="mailto:benoitelie1@gmail.com">benoitelie1@gmail.com</a></p>
                                                             </td>
                         </tr>
                                             <tr>
@@ -299,14 +301,7 @@
                                 version
                             </th>
                             <td>
-                                                                    <p>v.5.1.1</p>
-                                                            </td>
-                        </tr>
-                                            <tr>
-                            <th>
-                                todo
-                            </th>
-                            <td>
+                                                                    <p>v.6.0.0</p>
                                                             </td>
                         </tr>
                                         </table>
@@ -337,13 +332,7 @@
                                                                             </dl>
             <h2>Tags</h2>
             <table class="table table-condensed">
-                                    <tr>
-                        <th>
-                            todo
-                        </th>
-                        <td>
-                                                    </td>
-                    </tr>
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
                             </table>
         </aside>
     </div>
@@ -364,13 +353,7 @@
                                                                             </dl>
             <h2>Tags</h2>
             <table class="table table-condensed">
-                                    <tr>
-                        <th>
-                            todo
-                        </th>
-                        <td>
-                                                    </td>
-                    </tr>
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
                             </table>
         </aside>
     </div>
@@ -403,13 +386,7 @@
                                                             </dl>
             <h2>Tags</h2>
             <table class="table table-condensed">
-                                    <tr>
-                        <th>
-                            todo
-                        </th>
-                        <td>
-                                                    </td>
-                    </tr>
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
                             </table>
         </aside>
     </div>
@@ -433,13 +410,7 @@
                                                             </dl>
             <h2>Tags</h2>
             <table class="table table-condensed">
-                                    <tr>
-                        <th>
-                            todo
-                        </th>
-                        <td>
-                                                    </td>
-                    </tr>
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
                             </table>
         </aside>
     </div>
@@ -463,13 +434,7 @@
                                                             </dl>
             <h2>Tags</h2>
             <table class="table table-condensed">
-                                    <tr>
-                        <th>
-                            todo
-                        </th>
-                        <td>
-                                                    </td>
-                    </tr>
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
                             </table>
         </aside>
     </div>
@@ -493,13 +458,7 @@
                                                             </dl>
             <h2>Tags</h2>
             <table class="table table-condensed">
-                                    <tr>
-                        <th>
-                            todo
-                        </th>
-                        <td>
-                                                    </td>
-                    </tr>
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
                             </table>
         </aside>
     </div>
@@ -523,13 +482,55 @@
                                                             </dl>
             <h2>Tags</h2>
             <table class="table table-condensed">
-                                    <tr>
-                        <th>
-                            todo
-                        </th>
-                        <td>
-                                                    </td>
-                    </tr>
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_mail" name="property_mail" class="anchor"></a>
+            <article class="property">
+                <h3 class="private ">$mail</h3>
+                <pre class="signature">$mail : string</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                string
+                &mdash; mail à utiliser en cas de bug en mode production=true                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_freeErrorCode" name="property_freeErrorCode" class="anchor"></a>
+            <article class="property">
+                <h3 class="private ">$freeErrorCode</h3>
+                <pre class="signature">$freeErrorCode : array</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                array
+                &mdash; tableau des codes d&#039;erreur à relâcher                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
                             </table>
         </aside>
     </div>
@@ -553,13 +554,7 @@
                                                             </dl>
             <h2>Tags</h2>
             <table class="table table-condensed">
-                                    <tr>
-                        <th>
-                            todo
-                        </th>
-                        <td>
-                                                    </td>
-                    </tr>
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
                             </table>
         </aside>
     </div>
@@ -583,13 +578,7 @@
                                                             </dl>
             <h2>Tags</h2>
             <table class="table table-condensed">
-                                    <tr>
-                        <th>
-                            todo
-                        </th>
-                        <td>
-                                                    </td>
-                    </tr>
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
                             </table>
         </aside>
     </div>
@@ -613,13 +602,7 @@
                                                             </dl>
             <h2>Tags</h2>
             <table class="table table-condensed">
-                                    <tr>
-                        <th>
-                            todo
-                        </th>
-                        <td>
-                                                    </td>
-                    </tr>
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
                             </table>
         </aside>
     </div>
@@ -637,7 +620,7 @@
             <article class="method">
                 <h3 class="public ">__construct()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">__construct(string <span class="argument">$host</span>, string <span class="argument">$db_name</span>, string <span class="argument">$user</span>, string <span class="argument">$mdp</span>, string <span class="argument">$production</span>)</pre>
+                <pre class="signature" style="margin-right: 54px;">__construct(string  <span class="argument">$host = false</span>, string  <span class="argument">$db_name = false</span>, string  <span class="argument">$user = false</span>, string  <span class="argument">$mdp = false</span>, string  <span class="argument">$production = false</span>, string  <span class="argument">$mail = false</span>, array  <span class="argument">$freeErrorCode = false</span>) </pre>
                 <p><em>crée une instance PDO avec les valeurs en argument</em></p>
                 
 
@@ -645,32 +628,43 @@
                     <table class="table table-condensed table-hover">
                                                     <tr>
                                 <td>string</td>
-                                <td>$host</td>
+                                <td>$host </td>
                                 <td><p>l'host à utiliser (localhost par défaut)</p></td>
                             </tr>
                                                     <tr>
                                 <td>string</td>
-                                <td>$db_name</td>
+                                <td>$db_name </td>
                                 <td><p>nom de la base de données</p></td>
                             </tr>
                                                     <tr>
                                 <td>string</td>
-                                <td>$user</td>
+                                <td>$user </td>
                                 <td><p>utilisateur de la BDD</p></td>
                             </tr>
                                                     <tr>
                                 <td>string</td>
-                                <td>$mdp</td>
+                                <td>$mdp </td>
                                 <td><p>mot de passe de l'utilisateur</p></td>
                             </tr>
                                                     <tr>
                                 <td>string</td>
-                                <td>$production</td>
+                                <td>$production </td>
                                 <td><p>désactive les messages d'erreurs</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>string</td>
+                                <td>$mail </td>
+                                <td><p>mail à utiliser en cas de bug en mode production=true</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>array</td>
+                                <td>$freeErrorCode </td>
+                                <td><p>tableau des codes d'erreur à relâcher</p></td>
                             </tr>
                                             </table>
                 
                 
+                				
                             </article>
         </div>
         <aside class="span4 detailsbar">
@@ -687,13 +681,6 @@
                                                                                             
                                                     </td>
                     </tr>
-                                    <tr>
-                        <th>
-                            todo
-                        </th>
-                        <td>
-                                                    </td>
-                    </tr>
                             </table>
         </aside>
     </div>
@@ -704,12 +691,13 @@
             <article class="method">
                 <h3 class="public ">__sleep()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">__sleep()</pre>
+                <pre class="signature" style="margin-right: 54px;">__sleep() </pre>
                 <p><em>variables à sauver à la fin du chargement de page</em></p>
                 
 
                 
                 
+                				
                             </article>
         </div>
         <aside class="span4 detailsbar">
@@ -718,13 +706,7 @@
                                                                             </dl>
             <h2>Tags</h2>
             <table class="table table-condensed">
-                                    <tr>
-                        <th>
-                            todo
-                        </th>
-                        <td>
-                                                    </td>
-                    </tr>
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
                             </table>
         </aside>
     </div>
@@ -735,12 +717,13 @@
             <article class="method">
                 <h3 class="public ">__wakeup()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">__wakeup()</pre>
+                <pre class="signature" style="margin-right: 54px;">__wakeup() </pre>
                 <p><em>reconnexion à la BDD au chargement de la page</em></p>
                 
 
                 
                 
+                				
                             </article>
         </div>
         <aside class="span4 detailsbar">
@@ -749,13 +732,7 @@
                                                                             </dl>
             <h2>Tags</h2>
             <table class="table table-condensed">
-                                    <tr>
-                        <th>
-                            todo
-                        </th>
-                        <td>
-                                                    </td>
-                    </tr>
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
                             </table>
         </aside>
     </div>
@@ -766,7 +743,7 @@
             <article class="method">
                 <h3 class="public ">needInstance()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">needInstance(string <span class="argument">$session_index</span>) : bool</pre>
+                <pre class="signature" style="margin-right: 54px;">needInstance(string  <span class="argument">$session_index = &#039;bdd&#039;</span>) : boolean</pre>
                 <p><em>test le besoin de recharger la classe pdo</em></p>
                 <p>/!\ si vous changez $_SESSION['bdd'] par autre chose, par exemple $_SESSION['oSql'],
 vous devez passer 'oSql' comme paramètre de cette fonction</p>
@@ -775,16 +752,17 @@ vous devez passer 'oSql' comme paramètre de cette fonction</p>
                     <table class="table table-condensed table-hover">
                                                     <tr>
                                 <td>string</td>
-                                <td>$session_index</td>
+                                <td>$session_index </td>
                                 <td><p>l'index de $_SESSION où se trouve l'objet PDO ('bdd' par defaut)</p></td>
                             </tr>
                                             </table>
                 
                 
                                     <h4>Returns</h4>
-                    bool
+                    boolean
                                             &mdash; <p>true/false si oui ou non il faut une nouvelle instance</p>
-                                                </article>
+                                    				
+                            </article>
         </div>
         <aside class="span4 detailsbar">
             <h1><i class="icon-arrow-down"></i></h1>
@@ -793,13 +771,7 @@ vous devez passer 'oSql' comme paramètre de cette fonction</p>
                                                                             </dl>
             <h2>Tags</h2>
             <table class="table table-condensed">
-                                    <tr>
-                        <th>
-                            todo
-                        </th>
-                        <td>
-                                                    </td>
-                    </tr>
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
                             </table>
         </aside>
     </div>
@@ -819,7 +791,8 @@ vous devez passer 'oSql' comme paramètre de cette fonction</p>
                                     <h4>Returns</h4>
                     string
                                             &mdash; <p>url d'instanciation de l'objet bdd en cours</p>
-                                                </article>
+                                    				
+                            </article>
         </div>
         <aside class="span4 detailsbar">
             <h1><i class="icon-arrow-down"></i></h1>
@@ -827,13 +800,7 @@ vous devez passer 'oSql' comme paramètre de cette fonction</p>
                                                                             </dl>
             <h2>Tags</h2>
             <table class="table table-condensed">
-                                    <tr>
-                        <th>
-                            todo
-                        </th>
-                        <td>
-                                                    </td>
-                    </tr>
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
                             </table>
         </aside>
     </div>
@@ -844,7 +811,7 @@ vous devez passer 'oSql' comme paramètre de cette fonction</p>
             <article class="method">
                 <h3 class="public ">query()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">query(string <span class="argument">$sql</span>, array <span class="argument">$arg</span>, boolean <span class="argument">$mono_line</span>) : array|object</pre>
+                <pre class="signature" style="margin-right: 54px;">query(string  <span class="argument">$sql</span>, array  <span class="argument">$arg = null</span>, boolean  <span class="argument">$mono_line = false</span>) : array|object</pre>
                 <p><em>Passe une requête SQL avec ou sans variable (type SELECT)</em></p>
                 <p>Retourne :</p>
 <ul>
@@ -891,30 +858,30 @@ la méthode vous retournera directement un <strong>objet</strong></p>
 <p><em>Attention, pour les <code>LIMIT</code> il faut forcer la variable en integer, via <code>intval()</code></em></p>
 <p>On recupère les valeurs en utilisant le <strong>nom de la colonne</strong> dans la table (ou l'alias via <code>AS mon_alias</code>)</p>
 <ul>
-<li>Dans le cas du <code>Bdd::SINGLE_RES</code>, on a directement un <strong>objet</strong> dans data :<pre><code class="language-php">    echo $data-&gt;tab_colonne_1;
-    echo $data-&gt;mon_alias;</code></pre>
-</li>
-<li>Sinon il faut faire une boucle dans le tableau (<strong>array</strong>) :<pre><code class="language-php">    foreach($data as $unObjet){
+<li>Dans le cas du <code>Bdd::SINGLE_RES</code>, on a directement un <strong>objet</strong> dans data :
+<pre><code class="language-php">    echo $data-&gt;tab_colonne_1;
+    echo $data-&gt;mon_alias;</code></pre></li>
+<li>Sinon il faut faire une boucle dans le tableau (<strong>array</strong>) :
+<pre><code class="language-php">    foreach($data as $unObjet){
         echo $unObjet-&gt;tab_colonne_2;
-    }</code></pre>
-</li>
+    }</code></pre></li>
 </ul>
 
                                     <h4>Parameters</h4>
                     <table class="table table-condensed table-hover">
                                                     <tr>
                                 <td>string</td>
-                                <td>$sql</td>
+                                <td>$sql </td>
                                 <td><p>la requête SQL à executer</p></td>
                             </tr>
                                                     <tr>
                                 <td>array</td>
-                                <td>$arg</td>
+                                <td>$arg </td>
                                 <td><p>facultatif : le tableau d'arguments</p></td>
                             </tr>
                                                     <tr>
                                 <td>boolean</td>
-                                <td>$mono_line</td>
+                                <td>$mono_line </td>
                                 <td><p>facultatif : si le résultat doit être un objet</p></td>
                             </tr>
                                             </table>
@@ -923,7 +890,8 @@ la méthode vous retournera directement un <strong>objet</strong></p>
                                     <h4>Returns</h4>
                     array|object
                                             &mdash; <p>retourne un objet ou un tableau (array) d'objets</p>
-                                                </article>
+                                    				
+                            </article>
         </div>
         <aside class="span4 detailsbar">
             <h1><i class="icon-arrow-down"></i></h1>
@@ -939,13 +907,6 @@ la méthode vous retournera directement un <strong>objet</strong></p>
                                                                                             
                                                     </td>
                     </tr>
-                                    <tr>
-                        <th>
-                            todo
-                        </th>
-                        <td>
-                                                    </td>
-                    </tr>
                             </table>
         </aside>
     </div>
@@ -956,7 +917,7 @@ la méthode vous retournera directement un <strong>objet</strong></p>
             <article class="method">
                 <h3 class="public ">exec()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">exec(string <span class="argument">$sql</span>, array <span class="argument">$arg</span>) : int</pre>
+                <pre class="signature" style="margin-right: 54px;">exec(string  <span class="argument">$sql</span>, array  <span class="argument">$arg = null</span>) : integer</pre>
                 <p><em>exécute une requête SQL (type DELETE, INSERT INTO, UPDATE)</em></p>
                 <p>On lui passe en 1er paramètre la requête SQL avec le(s) marqueur(s).
 Un marqueur est une string avec <code>:</code> devant</p>
@@ -988,21 +949,22 @@ L'array doit être associatif <code>marqueur =&gt; valeur</code></p>
                     <table class="table table-condensed table-hover">
                                                     <tr>
                                 <td>string</td>
-                                <td>$sql</td>
+                                <td>$sql </td>
                                 <td><p>la requête SQL à executer</p></td>
                             </tr>
                                                     <tr>
                                 <td>array</td>
-                                <td>$arg</td>
+                                <td>$arg </td>
                                 <td><p>facultatif : l'array avec l(es) paramètre(s)</p></td>
                             </tr>
                                             </table>
                 
                 
                                     <h4>Returns</h4>
-                    int
+                    integer
                                             &mdash; <p>le nombre de lignes affectées</p>
-                                                </article>
+                                    				
+                            </article>
         </div>
         <aside class="span4 detailsbar">
             <h1><i class="icon-arrow-down"></i></h1>
@@ -1018,11 +980,42 @@ L'array doit être associatif <code>marqueur =&gt; valeur</code></p>
                                                                                             
                                                     </td>
                     </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_lastInsertId" name="method_lastInsertId" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">lastInsertId()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">lastInsertId() : string</pre>
+                <p><em>retourne l&#039;identifiant de la dernière insertion</em></p>
+                <p><strong>Attention, cette fonction se base sur PDO::lastInsertId() et peut ne pas toujours retourner la bonne valeur</strong>
+merci de lire la documentation liée à PDO::lastInsertId() pour plus d'information</p>
+<p>Utilisez cette méthode pour optenir le dernier ID rentré en bdd lors de l'instance en cours</p>
+
+                
+                
+                                    <h4>Returns</h4>
+                    string
+                                            &mdash; <p>le dernier Id d'insertion ou '0'</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
                                     <tr>
                         <th>
-                            todo
+                            api
                         </th>
                         <td>
+                                                                                            
                                                     </td>
                     </tr>
                             </table>
@@ -1035,7 +1028,7 @@ L'array doit être associatif <code>marqueur =&gt; valeur</code></p>
             <article class="method">
                 <h3 class="public ">prepare()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">prepare(string <span class="argument">$sql</span>) : bool</pre>
+                <pre class="signature" style="margin-right: 54px;">prepare(string  <span class="argument">$sql = null</span>) : boolean</pre>
                 <p><em>prépare une requête pour une/des exécution(s) ultérieure(s)</em></p>
                 <p><strong>AVANCÉE : Cette méthode permet des gains de performance mais vous pouvez utiliser <code>-&gt;query()</code> et <code>-&gt;exec()</code> à la place</strong></p>
 <p><em>Cette méthode implique l'utilisation de la méthode <code>-&gt;execute()</code>.
@@ -1048,16 +1041,17 @@ mais en devant changer les paramètres à lui passer.</p>
                     <table class="table table-condensed table-hover">
                                                     <tr>
                                 <td>string</td>
-                                <td>$sql</td>
+                                <td>$sql </td>
                                 <td><p>la requête SQL a préparer</p></td>
                             </tr>
                                             </table>
                 
                 
                                     <h4>Returns</h4>
-                    bool
+                    boolean
                                             &mdash; <p>retourne un TRUE/FALSE sur la préparation de la requête</p>
-                                                </article>
+                                    				
+                            </article>
         </div>
         <aside class="span4 detailsbar">
             <h1><i class="icon-arrow-down"></i></h1>
@@ -1073,13 +1067,6 @@ mais en devant changer les paramètres à lui passer.</p>
                                                                                             
                                                     </td>
                     </tr>
-                                    <tr>
-                        <th>
-                            todo
-                        </th>
-                        <td>
-                                                    </td>
-                    </tr>
                             </table>
         </aside>
     </div>
@@ -1090,7 +1077,7 @@ mais en devant changer les paramètres à lui passer.</p>
             <article class="method">
                 <h3 class="public ">execute()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">execute(array <span class="argument">$arg</span>, int <span class="argument">$retour</span>) : array|object|integer</pre>
+                <pre class="signature" style="margin-right: 54px;">execute(array  <span class="argument">$arg = null</span>, integer  <span class="argument">$retour = false</span>) : array|object|integer</pre>
                 <p><em>exécute une requête préparée à l&#039;aide de `-&gt;prepare()`</em></p>
                 <p><strong>AVANCÉE : Cette méthode permet des gains de performances mais vous pouvez utiliser <code>-&gt;query()</code> et <code>-&gt;exec()</code> à la place</strong></p>
 <p><em>Vous devez avant avoir préparé une requête à l'aide de <code>-&gt;prepare()</code>,
@@ -1146,25 +1133,25 @@ la méthode vous retournera directement un <strong>integer</strong> du nombre de
 <p>En cas de retour (autre que <code>Bdd::NO_RES</code> donc),
 on récupère les valeurs en utilisant le <strong>nom de la colonne</strong> dans la table (ou l'alias via <code>AS mon_alias</code>)</p>
 <ul>
-<li>Dans le cas du <code>Bdd::SINGLE_RES</code>, on a directement un <strong>objet</strong> dans data :<pre><code class="language-php">    echo $data-&gt;tab_colonne_1;
-    echo $data-&gt;mon_alias;</code></pre>
-</li>
-<li>Sinon il faut faire une boucle dans le tableau (<strong>array</strong>) :<pre><code class="language-php">    foreach($data as $unObjet){
+<li>Dans le cas du <code>Bdd::SINGLE_RES</code>, on a directement un <strong>objet</strong> dans data :
+<pre><code class="language-php">    echo $data-&gt;tab_colonne_1;
+    echo $data-&gt;mon_alias;</code></pre></li>
+<li>Sinon il faut faire une boucle dans le tableau (<strong>array</strong>) :
+<pre><code class="language-php">    foreach($data as $unObjet){
         echo $unObjet-&gt;tab_colonne_2;
-    }</code></pre>
-</li>
+    }</code></pre></li>
 </ul>
 
                                     <h4>Parameters</h4>
                     <table class="table table-condensed table-hover">
                                                     <tr>
                                 <td>array</td>
-                                <td>$arg</td>
+                                <td>$arg </td>
                                 <td><p>facultatif : l(es) argument(s) à passer</p></td>
                             </tr>
                                                     <tr>
-                                <td>int</td>
-                                <td>$retour</td>
+                                <td>integer</td>
+                                <td>$retour </td>
                                 <td><p>facultatif : demande un resultat en objet, array d'objet, ou pas de résultat</p></td>
                             </tr>
                                             </table>
@@ -1173,7 +1160,8 @@ on récupère les valeurs en utilisant le <strong>nom de la colonne</strong> dan
                                     <h4>Returns</h4>
                     array|object|integer
                                             &mdash; <p>retourne un objet, un tableau (array) d'objets ou le nombre de lignes affectées</p>
-                                                </article>
+                                    				
+                            </article>
         </div>
         <aside class="span4 detailsbar">
             <h1><i class="icon-arrow-down"></i></h1>
@@ -1187,13 +1175,6 @@ on récupère les valeurs en utilisant le <strong>nom de la colonne</strong> dan
                         </th>
                         <td>
                                                                                             
-                                                    </td>
-                    </tr>
-                                    <tr>
-                        <th>
-                            todo
-                        </th>
-                        <td>
                                                     </td>
                     </tr>
                             </table>
@@ -1218,6 +1199,7 @@ on récupère les valeurs en utilisant le <strong>nom de la colonne</strong> dan
 
                 
                 
+                				
                             </article>
         </div>
         <aside class="span4 detailsbar">
@@ -1226,13 +1208,7 @@ on récupère les valeurs en utilisant le <strong>nom de la colonne</strong> dan
                                                                             </dl>
             <h2>Tags</h2>
             <table class="table table-condensed">
-                                    <tr>
-                        <th>
-                            todo
-                        </th>
-                        <td>
-                                                    </td>
-                    </tr>
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
                             </table>
         </aside>
     </div>
@@ -1243,20 +1219,32 @@ on récupère les valeurs en utilisant le <strong>nom de la colonne</strong> dan
             <article class="method">
                 <h3 class="private ">_showError()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">_showError(\Exception <span class="argument">$e</span>) : void</pre>
+                <pre class="signature" style="margin-right: 54px;">_showError(\Exception  <span class="argument">$e</span>) : void</pre>
                 <p><em>Gère l&#039;affichage des erreurs via exception</em></p>
-                
+                <p>les exceptions dont le code est ajouté à $freeErrorCode lors de l'instanciation de la class sont relachée
+vous devez donc les capturer vous-même à l'aide d'un bloc try/catch afin de les traiter.</p>
+<p>Si l'on a ajouté le code d'erreur 23000 (SQL:violation d'une clef unique)
+via <code>new Bdd(null, null, null, null, false, null, array(23000))</code>, le code suivant retourneras "la clef existe déjà!" :</p>
+<pre><code class="language-php">            &lt;?php
+            try{
+                $_SESSION['bdd']-&gt;exec("INSERT INTO `table` (`tab_colonne_unique_1`,`tab_colonne_2`) VALUES ('clef_doublon','valeur2')");
+            }
+            catch(Exception $e){
+                if($e-&gt;getCode() == 23000) // on controle que le code d'erreur est le bon (si on avais ajouté plusieurs code dans l'array)
+                    echo 'la clef existe déjà!';
+            }</code></pre>
 
                                     <h4>Parameters</h4>
                     <table class="table table-condensed table-hover">
                                                     <tr>
                                 <td>\Exception</td>
-                                <td>$e</td>
+                                <td>$e </td>
                                 <td><p>une exception capturée</p></td>
                             </tr>
                                             </table>
                 
                 
+                				
                             </article>
         </div>
         <aside class="span4 detailsbar">
@@ -1265,13 +1253,7 @@ on récupère les valeurs en utilisant le <strong>nom de la colonne</strong> dan
                                                                             </dl>
             <h2>Tags</h2>
             <table class="table table-condensed">
-                                    <tr>
-                        <th>
-                            todo
-                        </th>
-                        <td>
-                                                    </td>
-                    </tr>
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
                             </table>
         </aside>
     </div>
@@ -1325,7 +1307,7 @@ on récupère les valeurs en utilisant le <strong>nom de la colonne</strong> dan
                 <section class="span10 offset1">
                     <hr />
                     Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor </a> and authored
-                    on April 29th, 2014 at 22:24.
+                    on August 22nd, 2014 at 16:49.
                 </section>
             </section>
         </section>
