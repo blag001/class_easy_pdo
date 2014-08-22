@@ -21,6 +21,8 @@
 	 * @param string $user utilisateur de la BDD
 	 * @param string $mdp mot de passe de l'utilisateur
 	 * @param bool $production (dés)active les messages d'erreurs
+	 * @param string $mail mail à utiliser en cas de bug en mode production=true
+	 * @param array  $freeErrorCode tableau des codes d'erreur à relâcher pour une gestion manuel
 	 */
 if (Bdd::needInstance())
-	$_SESSION['bdd'] = new Bdd(null, null, 'root', '', false);
+	$_SESSION['bdd'] = new Bdd(null, null, 'root', '', false, null, null);

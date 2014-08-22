@@ -58,8 +58,10 @@ class Bdd
 	private $mdp        = '';
 		/** @var boolean mode d'affichage des erreurs */
 	private $production = false;
-		/** @var string mail a utiliser en cas de bug en mode production=true */
+		/** @var string mail à utiliser en cas de bug en mode production=true */
 	private $mail ;
+		/** @var array tableau des codes d'erreur à relâcher */
+	private $freeErrorCode = array();
 
 		/** @var PDO variable avec l'instance PDO */
 	private $oBdd  = null;
@@ -86,9 +88,10 @@ class Bdd
 		 * @param string $user utilisateur de la BDD
 		 * @param string $mdp mot de passe de l'utilisateur
 		 * @param string $production désactive les messages d'erreurs
-		 * @param string $mail mail a utiliser en cas de bug en mode production=true
+		 * @param string $mail mail à utiliser en cas de bug en mode production=true
+		 * @param array  $freeErrorCode tableau des codes d'erreur à relâcher
 		 */
-	public function __construct($host=false, $db_name=false, $user=false, $mdp=false, $production=false, $mail = false)
+	public function __construct($host=false, $db_name=false, $user=false, $mdp=false, $production=false, $mail = false, $freeErrorCode = false)
 	{
 			// sauvegarde les variables si on les passe au constructeur
 		if(!empty($host))
@@ -111,6 +114,9 @@ class Bdd
 		else
 			$this->mail = 'webmaster@' . $_SERVER['SERVER_NAME'];
 
+		if(!empty($freeErrorCode) and is_array($freeErrorCode))
+			$this->freeErrorCode = $freeErrorCode;
+
 			// on sauve la page d'instanciation
 		$this->callSource = $_SERVER['PHP_SELF'];
 
@@ -126,7 +132,7 @@ class Bdd
 			$this->oReq->closeCursor();
 		}
 
-		return array('host', 'db_name', 'user', 'mdp', 'production', 'mail');
+		return array('host', 'db_name', 'user', 'mdp', 'production', 'mail', 'freeErrorCode');
 	}
 
 		/** reconnexion à la BDD au chargement de la page */
@@ -206,11 +212,34 @@ class Bdd
 		/**
 		 * Gère l'affichage des erreurs via exception
 		 *
+		 * les exceptions dont le code est ajouté à $freeErrorCode lors de l'instanciation de la class sont relachée
+		 * vous devez donc les capturer vous-même à l'aide d'un bloc try/catch afin de les traiter.
+		 *
+		 *
+		 * Si l'on a ajouté le code d'erreur 23000 (SQL:violation d'une clef unique)
+		 * via `new Bdd(null, null, null, null, false, null, array(23000))`, le code suivant retourneras "la clef existe déjà!" :
+		 * ```php
+		 * 			<?php
+		 * 			try{
+		 * 				$_SESSION['bdd']->exec("INSERT INTO `table` (`tab_colonne_unique_1`,`tab_colonne_2`) VALUES ('clef_doublon','valeur2')");
+		 * 			}
+		 * 			catch(Exception $e){
+		 * 				if($e->getCode() == 23000) // on controle que le code d'erreur est le bon (si on avais ajouté plusieurs code dans l'array)
+		 * 					echo 'la clef existe déjà!';
+		 * 			}
+		 * ```
+		 *
 		 * @param  Exception $e une exception capturée
 		 * @return void    pas de retour : termine le script et affiche un message
 		 */
 	private function _showError($e)
 	{
+		if(in_array($e->getCode(), $this->freeErrorCode))
+		{
+			throw $e;
+		}
+		else
+		{
 				// si on est en production, on ne met pas de détails mais on mail le webmaster
 			if($this->production){
 				$title = '[ERROR SQL/PDO]@'.$_SERVER['SERVER_NAME'];
@@ -243,6 +272,7 @@ class Bdd
 			}
 
 			die(); // en cas d'erreur, on stoppe le script
+		}
 	}
 
 	/////////////
