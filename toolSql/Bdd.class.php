@@ -42,7 +42,8 @@
 	 * @global boolean SINGLE_RES
 	 * @global int NO_RES
 	 * @author Benoit <benoitelie1@gmail.com>
-	 * @version v.6.0.0
+	 * @version v.6.0.1
+	 * @license http://opensource.org/licenses/BSD-3-Clause BSD licence 3-clause
 	 * @link https://github.com/blag001/class_easy_pdo depot GitHub
 	 */
 class Bdd
